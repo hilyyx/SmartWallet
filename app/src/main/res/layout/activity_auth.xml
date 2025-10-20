@@ -6,26 +6,39 @@
     android:layout_height="match_parent"
     tools:context=".ui.AuthActivity">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        style="@style/Widget.Material3.Toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:title="@string/app_name"
-        app:layout_scrollFlags="scroll|enterAlways" />
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
-        android:layout_gravity="center">
+        android:background="@color/brand_background">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/authTabs"
+        <!-- TabLayout в стиле карточки -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabIndicatorFullWidth="false" />
+            android:layout_marginTop="48dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="6dp"
+            app:strokeColor="@color/brand_border"
+            app:strokeWidth="1dp"
+            android:backgroundTint="@color/brand_card_bg">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/authTabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabIndicatorFullWidth="true"
+                app:tabIndicatorColor="@color/brand_primary"
+                app:tabSelectedTextColor="@color/brand_primary"
+                app:tabTextColor="@color/brand_text_secondary"
+                app:tabTextAppearance="@style/TextAppearance.Material3.BodyLarge"
+                app:tabMode="fixed"
+                app:tabGravity="fill" />
+
+        </com.google.android.material.card.MaterialCardView>
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/authViewPager"

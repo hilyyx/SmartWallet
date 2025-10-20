@@ -4,81 +4,114 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/md_theme_background">
+    android:background="@color/brand_background"
+    android:fitsSystemWindows="true">
 
-    <!-- AppBar -->
-    <com.google.android.material.appbar.AppBarLayout
+    <!-- Header with Assistant Info -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/md_theme_surface"
-        app:elevation="0dp">
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="16dp"
+        android:background="@drawable/header_bottom_border"
+        android:fitsSystemWindows="true">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/md_theme_surface"
-            app:title="AI Ассистент"
-            app:titleTextColor="@color/md_theme_onSurface"
-            app:titleTextAppearance="@style/TextAppearance.Material3.HeadlineSmall"
-            app:navigationIcon="@drawable/ic_arrow_back_24" />
+        <!-- Back Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonBack"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:icon="@drawable/ic_arrow_back_24"
+            app:iconTint="@color/brand_primary"
+            android:backgroundTint="@android:color/transparent" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+        <!-- Assistant Avatar -->
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_assistant_avatar"
+            android:background="@drawable/assistant_avatar_background"
+            android:padding="8dp"
+            android:layout_marginEnd="16dp" />
+
+        <!-- Assistant Info -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Smart Assistant"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/brand_text_primary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ваш персональный помощник"
+                android:textSize="14sp"
+                android:textColor="@color/brand_text_secondary" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <!-- Chat Container -->
-    <LinearLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerChat"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:padding="16dp"
+        android:clipToPadding="false" />
 
-        <!-- Messages RecyclerView -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerChat"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:padding="8dp"
-            android:clipToPadding="false" />
+    <!-- Input Container -->
+    <LinearLayout
+        android:id="@+id/inputContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:background="@color/brand_card_bg"
+        android:elevation="8dp"
+        android:fitsSystemWindows="true">
 
-        <!-- Input Container -->
-        <LinearLayout
-            android:layout_width="match_parent"
+        <EditText
+            android:id="@+id/editMessage"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="16dp"
-            android:background="@color/md_theme_surface"
-            android:elevation="4dp">
+            android:layout_weight="1"
+            android:hint="Введите сообщение..."
+            android:inputType="textMultiLine"
+            android:maxLines="3"
+            android:padding="12dp"
+            android:background="@drawable/chat_input_background"
+            android:layout_marginEnd="12dp"
+            android:textColor="@color/brand_text_primary"
+            android:textColorHint="@color/brand_text_secondary" />
 
-            <EditText
-                android:id="@+id/editMessage"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Введите сообщение..."
-                android:inputType="textMultiLine"
-                android:maxLines="3"
-                android:padding="12dp"
-                android:background="@drawable/chat_input_background"
-                android:layout_marginEnd="12dp"
-                android:textColor="@color/md_theme_onSurface"
-                android:textColorHint="@color/md_theme_onSurfaceVariant" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonSend"
-                style="@style/Widget.Material3.Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Отправить"
-                android:textSize="14sp"
-                app:icon="@drawable/ic_send_24"
-                app:iconPadding="4dp"
-                app:cornerRadius="20dp"
-                android:minWidth="0dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp" />
-
-        </LinearLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonSend"
+            style="@style/Widget.Material3.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Отправить"
+            android:textSize="14sp"
+            app:icon="@drawable/ic_send_24"
+            app:iconPadding="4dp"
+            app:cornerRadius="20dp"
+            android:minWidth="0dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:backgroundTint="@color/brand_primary" />
 
     </LinearLayout>
 

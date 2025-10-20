@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_theme_surface">
+    android:background="@color/brand_background">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="32dp">
+        android:padding="40dp">
 
         <!-- Profile Header with Avatar -->
         <com.google.android.material.card.MaterialCardView
@@ -18,14 +18,14 @@
             app:cardCornerRadius="28dp"
             app:cardElevation="4dp"
             app:cardUseCompatPadding="true"
-            android:layout_marginBottom="32dp"
-            android:backgroundTint="@color/md_theme_surfaceContainerHigh">
+            android:layout_marginBottom="40dp"
+            android:backgroundTint="@color/brand_card_bg">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="40dp">
+                android:padding="48dp">
 
                 <!-- Avatar and Name Row -->
                 <LinearLayout
@@ -64,7 +64,7 @@
                             android:text="Загрузка..."
                             android:textSize="20sp"
                             android:textStyle="bold"
-                            android:textColor="@color/md_theme_onSurface" />
+                            android:textColor="@color/brand_text_primary" />
 
                         <TextView
                             android:id="@+id/textPhone"
@@ -124,7 +124,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Загрузка..."
                                 android:textSize="16sp"
-                                android:textColor="@color/md_theme_onSurface"
+                                android:textColor="@color/brand_text_primary"
                                 android:layout_marginTop="2dp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -140,7 +140,7 @@
             app:cardCornerRadius="20dp"
             app:cardElevation="2dp"
             app:cardUseCompatPadding="true"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="40dp"
             android:backgroundTint="@color/md_theme_surfaceContainerLow">
 
             <LinearLayout
@@ -155,7 +155,7 @@
                     android:text="Быстрые действия"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="@color/md_theme_onSurface"
+                    android:textColor="@color/brand_text_primary"
                     android:layout_marginBottom="16dp" />
 
                 <!-- AI Chat Button -->

@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp">
+    android:padding="32dp"
+    android:background="@color/brand_background">
 
     <!-- Header -->
     <LinearLayout
@@ -11,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginBottom="24dp">
+        android:layout_marginBottom="32dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -93,7 +94,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/recyclerCards"
         android:layout_above="@id/fabAddCard"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="24dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -108,7 +109,7 @@
                 app:cardElevation="2dp"
                 app:cardUseCompatPadding="true"
                 android:layout_marginBottom="16dp"
-                android:backgroundTint="@color/md_theme_surfaceContainerLow">
+                android:backgroundTint="@color/brand_card_bg">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -122,7 +123,7 @@
                         android:text="Статистика карт"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        android:textColor="@color/md_theme_onSurface"
+                        android:textColor="@color/brand_text_primary"
                         android:layout_marginBottom="16dp" />
 
                     <LinearLayout

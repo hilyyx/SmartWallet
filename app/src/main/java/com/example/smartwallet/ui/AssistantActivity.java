@@ -3,12 +3,17 @@ package com.example.smartwallet.ui;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,13 +23,14 @@ import com.example.smartwallet.model.ChatMessage;
 import com.example.smartwallet.ui.adapter.ChatAdapter;
 import com.example.smartwallet.utils.TokenManager;
 import com.example.smartwallet.viewmodel.ChatViewModel;
-import com.google.android.material.appbar.MaterialToolbar;
 
 public class AssistantActivity extends AppCompatActivity {
 
     private RecyclerView recyclerChat;
     private EditText editMessage;
     private Button buttonSend;
+    private Button buttonBack;
+    private LinearLayout inputContainer;
     private ChatAdapter chatAdapter;
     private ChatViewModel chatViewModel;
 
@@ -33,27 +39,33 @@ public class AssistantActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assistant);
 
-        setupToolbar();
+        // Настройка системных отступов
+        setupSystemBars();
+        
         initViews();
         setupChat();
+        setupKeyboardBehavior();
     }
-
-    private void setupToolbar() {
-        MaterialToolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("AI Ассистент");
+    
+    private void setupSystemBars() {
+        // Скрываем системную панель навигации и делаем полноэкранный режим
+        WindowInsetsControllerCompat windowInsetsController = ViewCompat.getWindowInsetsController(getWindow().getDecorView());
+        if (windowInsetsController != null) {
+            windowInsetsController.hide(WindowInsetsCompat.Type.systemBars());
+            windowInsetsController.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
         }
         
-        toolbar.setNavigationOnClickListener(v -> finish());
+        // Настройка клавиатуры
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
+
 
     private void initViews() {
         recyclerChat = findViewById(R.id.recyclerChat);
         editMessage = findViewById(R.id.editMessage);
         buttonSend = findViewById(R.id.buttonSend);
+        buttonBack = findViewById(R.id.buttonBack);
+        inputContainer = findViewById(R.id.inputContainer);
     }
 
     private void setupChat() {
@@ -93,8 +105,57 @@ public class AssistantActivity extends AppCompatActivity {
         // Send button click
         buttonSend.setOnClickListener(v -> sendMessage());
         
+        // Back button click
+        buttonBack.setOnClickListener(v -> finish());
+        
         // Add welcome message
         addWelcomeMessage();
+    }
+    
+    private void setupKeyboardBehavior() {
+        // Слушатель изменений системных отступов (включая клавиатуру)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (v, insets) -> {
+            // Получаем отступы клавиатуры
+            int keyboardHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
+            int systemBarsHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
+            
+            // Применяем отступы к inputContainer
+            if (keyboardHeight > 0) {
+                // Клавиатура поднялась
+                inputContainer.setPadding(
+                    inputContainer.getPaddingLeft(),
+                    inputContainer.getPaddingTop(),
+                    inputContainer.getPaddingRight(),
+                    keyboardHeight + 16 // добавляем небольшой отступ
+                );
+                
+                // Прокручиваем к последнему сообщению
+                if (chatAdapter != null && chatAdapter.getItemCount() > 0) {
+                    recyclerChat.post(() -> {
+                        recyclerChat.scrollToPosition(chatAdapter.getItemCount() - 1);
+                    });
+                }
+            } else {
+                // Клавиатура скрыта, убираем отступы
+                inputContainer.setPadding(
+                    inputContainer.getPaddingLeft(),
+                    inputContainer.getPaddingTop(),
+                    inputContainer.getPaddingRight(),
+                    16
+                );
+            }
+            
+            return insets;
+        });
+        
+        // Дополнительный слушатель для прокрутки при появлении клавиатуры
+        editMessage.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus && chatAdapter != null && chatAdapter.getItemCount() > 0) {
+                recyclerChat.postDelayed(() -> {
+                    recyclerChat.scrollToPosition(chatAdapter.getItemCount() - 1);
+                }, 100);
+            }
+        });
     }
 
     private void addWelcomeMessage() {

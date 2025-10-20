@@ -5,23 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!-- AppBar -->
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/md_theme_surface"
-        app:elevation="0dp">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/md_theme_surface"
-            app:title="SmartPay"
-            app:titleTextColor="@color/md_theme_onSurface"
-            app:titleTextAppearance="@style/TextAppearance.Material3.HeadlineSmall" />
-
-    </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
         android:id="@+id/fragmentContainer"

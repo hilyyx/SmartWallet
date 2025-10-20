@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Детали транзакции"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/brand_text_primary"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Сумма -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Сумма:"
+            android:textSize="16sp"
+            android:textColor="@color/brand_text_secondary" />
+
+        <TextView
+            android:id="@+id/textAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1000.00 ₽"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/brand_text_primary" />
+
+    </LinearLayout>
+
+    <!-- Категория -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Категория:"
+            android:textSize="16sp"
+            android:textColor="@color/brand_text_secondary" />
+
+        <TextView
+            android:id="@+id/textCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Еда"
+            android:textSize="16sp"
+            android:textColor="@color/brand_text_primary" />
+
+    </LinearLayout>
+
+    <!-- Дата -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Дата:"
+            android:textSize="16sp"
+            android:textColor="@color/brand_text_secondary" />
+
+        <TextView
+            android:id="@+id/textDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20.10.2025 19:23"
+            android:textSize="16sp"
+            android:textColor="@color/brand_text_primary" />
+
+    </LinearLayout>
+
+    <!-- Карта -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Карта:"
+            android:textSize="16sp"
+            android:textColor="@color/brand_text_secondary" />
+
+        <TextView
+            android:id="@+id/textCard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Карта #1"
+            android:textSize="16sp"
+            android:textColor="@color/brand_text_primary" />
+
+    </LinearLayout>
+
+    <!-- MCC -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="MCC:"
+            android:textSize="16sp"
+            android:textColor="@color/brand_text_secondary" />
+
+        <TextView
+            android:id="@+id/textMcc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5812"
+            android:textSize="16sp"
+            android:textColor="@color/brand_text_primary" />
+
+    </LinearLayout>
+
+    <!-- Кэшбэк -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="24dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Кэшбэк:"
+            android:textSize="16sp"
+            android:textColor="@color/brand_text_secondary" />
+
+        <TextView
+            android:id="@+id/textCashback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="50.00 ₽"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/brand_primary" />
+
+    </LinearLayout>
+
+    <!-- Кнопка закрытия -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonClose"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Закрыть"
+        android:textSize="16sp"
+        app:cornerRadius="12dp" />
+
+</LinearLayout>
