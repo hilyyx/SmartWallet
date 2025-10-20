@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.smartwallet.R;
 import com.example.smartwallet.network.dto.Transaction;
@@ -26,6 +27,7 @@ import com.example.smartwallet.viewmodel.HistoryViewModel;
 public class HistoryFragment extends Fragment implements TransactionsAdapter.OnTransactionClickListener {
 
     private RecyclerView recyclerHistory;
+    private SwipeRefreshLayout swipeRefresh;
     private LinearLayout emptyState;
     private ProgressBar progress;
     private TransactionsAdapter transactionsAdapter;
@@ -45,8 +47,15 @@ public class HistoryFragment extends Fragment implements TransactionsAdapter.OnT
     
     private void initViews(View view) {
         recyclerHistory = view.findViewById(R.id.recyclerHistory);
+        swipeRefresh = view.findViewById(R.id.swipeRefresh);
         emptyState = view.findViewById(R.id.emptyState);
         progress = view.findViewById(R.id.progress);
+        
+        // Настройка SwipeRefreshLayout
+        swipeRefresh.setColorSchemeResources(R.color.brand_primary);
+        swipeRefresh.setOnRefreshListener(() -> {
+            historyViewModel.loadTransactions();
+        });
     }
     
     private void setupRecyclerView() {
@@ -71,6 +80,7 @@ public class HistoryFragment extends Fragment implements TransactionsAdapter.OnT
         // Observe loading state
         historyViewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
             setLoading(isLoading);
+            swipeRefresh.setRefreshing(isLoading);
         });
         
         // Observe errors

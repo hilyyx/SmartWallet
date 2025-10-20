@@ -11,13 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartwallet.R;
 import com.example.smartwallet.network.dto.Transaction;
+import com.example.smartwallet.utils.DateUtils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapter.TransactionViewHolder> {
     
@@ -35,6 +32,25 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
         notifyDataSetChanged();
+    }
+    
+    public void addTransaction(Transaction transaction) {
+        transactions.add(transaction);
+        notifyItemInserted(transactions.size() - 1);
+    }
+    
+    public void removeTransaction(int position) {
+        if (position >= 0 && position < transactions.size()) {
+            transactions.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+    
+    public void updateTransaction(int position, Transaction transaction) {
+        if (position >= 0 && position < transactions.size()) {
+            transactions.set(position, transaction);
+            notifyItemChanged(position);
+        }
     }
     
     @NonNull
@@ -79,7 +95,7 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
         
         public void bind(Transaction transaction) {
             // Форматирование даты
-            String formattedDate = formatDate(transaction.createdAt);
+            String formattedDate = DateUtils.formatApiDate(transaction.createdAt);
             textDate.setText(formattedDate);
             
             // Сумма с знаком
@@ -93,17 +109,6 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
             
             // Кэшбэк
             textCashback.setText(String.format("%.2f ₽", transaction.cashbackEarned));
-        }
-        
-        private String formatDate(String dateString) {
-            try {
-                SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
-                SimpleDateFormat outputFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
-                Date date = inputFormat.parse(dateString);
-                return outputFormat.format(date);
-            } catch (ParseException e) {
-                return dateString;
-            }
         }
     }
 }

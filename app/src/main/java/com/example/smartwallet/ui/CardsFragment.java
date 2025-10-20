@@ -26,6 +26,7 @@ import com.example.smartwallet.network.dto.Card;
 import com.example.smartwallet.network.dto.CardRequest;
 import com.example.smartwallet.network.dto.CashbackRules;
 import com.example.smartwallet.ui.adapter.CardsAdapter;
+import com.example.smartwallet.utils.ErrorHandler;
 import com.example.smartwallet.utils.TokenManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -40,6 +41,7 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
 
     private RecyclerView recyclerCards;
     private LinearLayout emptyState;
+    private View errorState;
     private ProgressBar progress;
     private FloatingActionButton fabAddCard;
     private CardsAdapter cardsAdapter;
@@ -71,6 +73,7 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
     private void initViews(View view) {
         recyclerCards = view.findViewById(R.id.recyclerCards);
         emptyState = view.findViewById(R.id.emptyState);
+        errorState = view.findViewById(R.id.errorState);
         progress = view.findViewById(R.id.progress);
         fabAddCard = view.findViewById(R.id.fabAddCard);
         
@@ -79,6 +82,10 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
         textTotalLimit = view.findViewById(R.id.textTotalLimit);
         textAvgCashback = view.findViewById(R.id.textAvgCashback);
         
+        fabAddCard.setOnClickListener(v -> showAddCardDialog());
+        
+        // Setup error state retry button
+        setupErrorState();
     }
     
     private void setupRecyclerView() {
@@ -99,13 +106,50 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
         fabAddCard.setOnClickListener(v -> showAddCardDialog());
     }
     
+    private void setupErrorState() {
+        if (errorState != null) {
+            Button retryButton = errorState.findViewById(R.id.buttonRetry);
+            if (retryButton != null) {
+                retryButton.setOnClickListener(v -> {
+                    hideErrorState();
+                    loadCards();
+                });
+            }
+        }
+    }
+    
+    private void showErrorState(String message) {
+        if (errorState != null) {
+            TextView errorMessage = errorState.findViewById(R.id.textErrorMessage);
+            TextView errorDescription = errorState.findViewById(R.id.textErrorDescription);
+            
+            if (errorMessage != null) {
+                errorMessage.setText("Ошибка загрузки карт");
+            }
+            if (errorDescription != null) {
+                errorDescription.setText(message);
+            }
+            
+            errorState.setVisibility(View.VISIBLE);
+            recyclerCards.setVisibility(View.GONE);
+            emptyState.setVisibility(View.GONE);
+        }
+    }
+    
+    private void hideErrorState() {
+        if (errorState != null) {
+            errorState.setVisibility(View.GONE);
+        }
+    }
+    
     private void loadCards() {
         String token = tokenManager.getToken();
         if (token == null) {
-            Toast.makeText(requireContext(), "Токен не найден. Войдите в систему.", Toast.LENGTH_SHORT).show();
+            showErrorState("Токен не найден. Войдите в систему.");
             return;
         }
         
+        hideErrorState();
         setLoading(true);
         String authToken = "Bearer " + token;
         
@@ -119,17 +163,17 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
                     updateEmptyState(cards.isEmpty());
                     updateStatistics(cards);
                 } else if (response.code() == 401) {
-                    Toast.makeText(requireContext(), "Сессия истекла. Войдите в систему.", Toast.LENGTH_SHORT).show();
+                    showErrorState("Сессия истекла. Войдите в систему.");
                     tokenManager.clearToken();
                 } else {
-                    Toast.makeText(requireContext(), "Ошибка загрузки карт", Toast.LENGTH_SHORT).show();
+                    showErrorState("Ошибка загрузки карт. Код: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<List<Card>> call, @NonNull Throwable t) {
                 setLoading(false);
-                Toast.makeText(requireContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                showErrorState(ErrorHandler.getErrorMessage(t));
             }
         });
     }
@@ -214,7 +258,7 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
 
                 @Override
                 public void onFailure(@NonNull Call<Card> call, @NonNull Throwable t) {
-                    Toast.makeText(requireContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                    ErrorHandler.showError(requireContext(), t);
                 }
             });
         } catch (NumberFormatException e) {
@@ -228,6 +272,7 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
     }
     
     private void updateEmptyState(boolean isEmpty) {
+        hideErrorState();
         emptyState.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
         recyclerCards.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
     }

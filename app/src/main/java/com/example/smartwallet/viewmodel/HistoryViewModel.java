@@ -7,6 +7,9 @@ import androidx.lifecycle.ViewModel;
 import com.example.smartwallet.network.ApiClient;
 import com.example.smartwallet.network.TransactionsApi;
 import com.example.smartwallet.network.dto.Transaction;
+import com.example.smartwallet.utils.ErrorHandler;
+import com.example.smartwallet.utils.Logger;
+import com.example.smartwallet.utils.NetworkUtils;
 import com.example.smartwallet.utils.TokenManager;
 
 import java.util.ArrayList;
@@ -51,10 +54,19 @@ public class HistoryViewModel extends ViewModel {
     public void loadTransactions() {
         String token = tokenManager.getToken();
         if (token == null) {
+            Logger.w("HistoryViewModel", "Token not found");
             error.setValue("Токен не найден. Войдите в систему.");
             return;
         }
         
+        // Check network connectivity
+        if (!NetworkUtils.isNetworkAvailable(tokenManager.getContext())) {
+            Logger.w("HistoryViewModel", "No network connection");
+            error.setValue("Нет подключения к интернету. Проверьте соединение и попробуйте снова.");
+            return;
+        }
+        
+        Logger.d("HistoryViewModel", "Loading transactions");
         isLoading.setValue(true);
         String authToken = "Bearer " + token;
         
@@ -63,17 +75,21 @@ public class HistoryViewModel extends ViewModel {
             public void onResponse(Call<List<Transaction>> call, Response<List<Transaction>> response) {
                 isLoading.setValue(false);
                 if (response.isSuccessful() && response.body() != null) {
+                    Logger.i("HistoryViewModel", "Transactions loaded successfully: " + response.body().size() + " items");
                     transactionList = response.body();
                     transactions.setValue(new ArrayList<>(transactionList));
                 } else {
-                    error.setValue("Ошибка загрузки истории транзакций");
+                    String errorMsg = "Ошибка загрузки истории транзакций. Код: " + response.code();
+                    Logger.e("HistoryViewModel", errorMsg);
+                    error.setValue(errorMsg);
                 }
             }
 
             @Override
             public void onFailure(Call<List<Transaction>> call, Throwable t) {
                 isLoading.setValue(false);
-                error.setValue(t.getMessage());
+                Logger.e("HistoryViewModel", "Failed to load transactions", t);
+                error.setValue(ErrorHandler.getErrorMessage(t));
             }
         });
     }

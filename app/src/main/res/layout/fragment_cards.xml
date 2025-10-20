@@ -78,6 +78,15 @@
 
     </LinearLayout>
 
+    <!-- Error State -->
+    <include
+        android:id="@+id/errorState"
+        layout="@layout/error_state"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
     <!-- Progress Indicator -->
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progress"

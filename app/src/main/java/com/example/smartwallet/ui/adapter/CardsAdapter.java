@@ -32,6 +32,25 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
         notifyDataSetChanged();
     }
     
+    public void addCard(Card card) {
+        cards.add(card);
+        notifyItemInserted(cards.size() - 1);
+    }
+    
+    public void removeCard(int position) {
+        if (position >= 0 && position < cards.size()) {
+            cards.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+    
+    public void updateCard(int position, Card card) {
+        if (position >= 0 && position < cards.size()) {
+            cards.set(position, card);
+            notifyItemChanged(position);
+        }
+    }
+    
     @NonNull
     @Override
     public CardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

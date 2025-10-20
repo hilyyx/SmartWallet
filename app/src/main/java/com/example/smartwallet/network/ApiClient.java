@@ -1,5 +1,6 @@
 package com.example.smartwallet.network;
 
+import com.example.smartwallet.utils.Logger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -16,7 +17,11 @@ public final class ApiClient {
 
     private static Retrofit getRetrofit() {
         if (retrofitInstance == null) {
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+            Logger.i("ApiClient", "Initializing Retrofit with base URL: " + BASE_URL);
+            
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor(message -> {
+                Logger.d("HTTP", message);
+            });
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
             OkHttpClient client = new OkHttpClient.Builder()
@@ -30,6 +35,8 @@ public final class ApiClient {
                     .client(client)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
+                    
+            Logger.i("ApiClient", "Retrofit initialized successfully");
         }
         return retrofitInstance;
     }

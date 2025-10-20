@@ -9,6 +9,7 @@ import com.example.smartwallet.network.ApiClient;
 import com.example.smartwallet.network.AssistantApi;
 import com.example.smartwallet.network.dto.ChatRequest;
 import com.example.smartwallet.network.dto.ChatResponse;
+import com.example.smartwallet.utils.ErrorHandler;
 import com.example.smartwallet.utils.TokenManager;
 
 import java.util.ArrayList;
@@ -92,7 +93,7 @@ public class ChatViewModel extends ViewModel {
             @Override
             public void onFailure(Call<ChatResponse> call, Throwable t) {
                 isLoading.setValue(false);
-                error.setValue(t.getMessage());
+                error.setValue(ErrorHandler.getErrorMessage(t));
             }
         });
     }
