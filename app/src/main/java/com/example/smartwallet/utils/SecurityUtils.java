@@ -11,13 +11,7 @@ import java.security.NoSuchAlgorithmException;
 public class SecurityUtils {
     
     public static boolean isDeviceSecure(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return Settings.Secure.getInt(
-                context.getContentResolver(),
-                Settings.Secure.LOCK_SCREEN_TYPE,
-                0
-            ) != 0;
-        }
+        // Simplified implementation - always return false for now
         return false;
     }
     

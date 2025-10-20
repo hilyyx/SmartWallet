@@ -59,11 +59,16 @@ public class HistoryViewModel extends ViewModel {
             return;
         }
         
-        // Check network connectivity
-        if (!NetworkUtils.isNetworkAvailable(tokenManager.getContext())) {
-            Logger.w("HistoryViewModel", "No network connection");
-            error.setValue("Нет подключения к интернету. Проверьте соединение и попробуйте снова.");
-            return;
+        // Check network connectivity (optional - will not block if permission is missing)
+        try {
+            if (!NetworkUtils.isNetworkAvailable(tokenManager.getContext())) {
+                Logger.w("HistoryViewModel", "No network connection");
+                error.setValue("Нет подключения к интернету. Проверьте соединение и попробуйте снова.");
+                return;
+            }
+        } catch (Exception e) {
+            Logger.w("HistoryViewModel", "Could not check network state, proceeding anyway");
+            // Continue with the request even if we can't check network state
         }
         
         Logger.d("HistoryViewModel", "Loading transactions");

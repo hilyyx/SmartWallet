@@ -45,8 +45,14 @@ public class ErrorHandler {
             return "Сервер недоступен. Проверьте подключение к интернету.";
         } else if (throwable instanceof IOException) {
             return "Ошибка сети. Проверьте подключение к интернету.";
+        } else if (throwable instanceof SecurityException) {
+            return "Ошибка доступа. Проверьте разрешения приложения.";
         } else {
-            return "Неизвестная ошибка: " + throwable.getMessage();
+            String message = throwable.getMessage();
+            if (message != null && message.contains("ACCESS_NETWORK_STATE")) {
+                return "Ошибка доступа к состоянию сети. Приложение будет работать в ограниченном режиме.";
+            }
+            return "Неизвестная ошибка: " + message;
         }
     }
     

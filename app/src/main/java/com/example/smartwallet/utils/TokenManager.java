@@ -9,9 +9,11 @@ public class TokenManager {
     
     private static TokenManager instance;
     private SharedPreferences prefs;
+    private Context context;
     
     private TokenManager(Context context) {
-        prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        this.context = context.getApplicationContext();
+        prefs = this.context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
     }
     
     public static synchronized TokenManager getInstance(Context context) {
@@ -35,6 +37,10 @@ public class TokenManager {
     
     public boolean hasToken() {
         return getToken() != null;
+    }
+    
+    public Context getContext() {
+        return context;
     }
 }
 

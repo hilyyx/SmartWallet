@@ -8,6 +8,7 @@ import com.example.smartwallet.network.ApiClient;
 import com.example.smartwallet.network.TransactionsApi;
 import com.example.smartwallet.network.dto.AnalyticsData;
 import com.example.smartwallet.network.dto.Transaction;
+import com.example.smartwallet.utils.ErrorHandler;
 import com.example.smartwallet.utils.TokenManager;
 
 import java.text.ParseException;
@@ -81,7 +82,7 @@ public class AnalyticsViewModel extends ViewModel {
             @Override
             public void onFailure(Call<List<Transaction>> call, Throwable t) {
                 isLoading.setValue(false);
-                error.setValue(t.getMessage());
+                error.setValue(ErrorHandler.getErrorMessage(t));
             }
         });
     }

@@ -23,6 +23,7 @@ import com.example.smartwallet.network.dto.BestCardResponse;
 import com.example.smartwallet.network.dto.Card;
 import com.example.smartwallet.network.dto.Recommendation;
 import com.example.smartwallet.network.dto.TransactionRequest;
+import com.example.smartwallet.utils.ErrorHandler;
 import com.example.smartwallet.utils.TokenManager;
 
 import java.util.List;
@@ -114,7 +115,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(@NonNull Call<List<Card>> call, @NonNull Throwable t) {
                 setLoading(false);
-                Toast.makeText(requireContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                ErrorHandler.showError(requireContext(), t);
             }
         });
     }
@@ -189,7 +190,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(@NonNull Call<BestCardResponse> call, @NonNull Throwable t) {
                 setLoading(false);
-                Toast.makeText(requireContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                ErrorHandler.showError(requireContext(), t);
             }
         });
     }
@@ -233,7 +234,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                 setLoading(false);
-                Toast.makeText(requireContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                ErrorHandler.showError(requireContext(), t);
             }
         });
     }

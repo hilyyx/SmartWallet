@@ -77,9 +77,10 @@ public class ResourceUtils {
     
     public static int getActionBarHeight(Context context) {
         int[] attrs = {android.R.attr.actionBarSize};
-        int[] values = new int[1];
-        context.getTheme().obtainStyledAttributes(attrs).getValue(0, values);
-        return values[0];
+        android.content.res.TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs);
+        int height = typedArray.getDimensionPixelSize(0, 0);
+        typedArray.recycle();
+        return height;
     }
     
     public static boolean isDarkTheme(Context context) {

@@ -14,6 +14,10 @@ public class PermissionUtils {
         Manifest.permission.ACCESS_NETWORK_STATE
     };
     
+    public static final String[] RECOMMENDED_PERMISSIONS = {
+        Manifest.permission.ACCESS_WIFI_STATE
+    };
+    
     public static final String[] OPTIONAL_PERMISSIONS = {
         Manifest.permission.CAMERA,
         Manifest.permission.READ_EXTERNAL_STORAGE,
