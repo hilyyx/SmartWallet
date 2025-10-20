@@ -11,9 +11,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,24 +36,9 @@ public class AssistantActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assistant);
 
-        // Настройка системных отступов
-        setupSystemBars();
-        
         initViews();
         setupChat();
         setupKeyboardBehavior();
-    }
-    
-    private void setupSystemBars() {
-        // Скрываем системную панель навигации и делаем полноэкранный режим
-        WindowInsetsControllerCompat windowInsetsController = ViewCompat.getWindowInsetsController(getWindow().getDecorView());
-        if (windowInsetsController != null) {
-            windowInsetsController.hide(WindowInsetsCompat.Type.systemBars());
-            windowInsetsController.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
-        }
-        
-        // Настройка клавиатуры
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
 
@@ -113,42 +95,8 @@ public class AssistantActivity extends AppCompatActivity {
     }
     
     private void setupKeyboardBehavior() {
-        // Слушатель изменений системных отступов (включая клавиатуру)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (v, insets) -> {
-            // Получаем отступы клавиатуры
-            int keyboardHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
-            int systemBarsHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
-            
-            // Применяем отступы к inputContainer
-            if (keyboardHeight > 0) {
-                // Клавиатура поднялась
-                inputContainer.setPadding(
-                    inputContainer.getPaddingLeft(),
-                    inputContainer.getPaddingTop(),
-                    inputContainer.getPaddingRight(),
-                    keyboardHeight + 16 // добавляем небольшой отступ
-                );
-                
-                // Прокручиваем к последнему сообщению
-                if (chatAdapter != null && chatAdapter.getItemCount() > 0) {
-                    recyclerChat.post(() -> {
-                        recyclerChat.scrollToPosition(chatAdapter.getItemCount() - 1);
-                    });
-                }
-            } else {
-                // Клавиатура скрыта, убираем отступы
-                inputContainer.setPadding(
-                    inputContainer.getPaddingLeft(),
-                    inputContainer.getPaddingTop(),
-                    inputContainer.getPaddingRight(),
-                    16
-                );
-            }
-            
-            return insets;
-        });
-        
-        // Дополнительный слушатель для прокрутки при появлении клавиатуры
+        // Простая настройка клавиатуры - adjustResize в манифесте сделает всю работу
+        // Дополнитеfutuльный слушатель для прокрутки при появлении клавиатуры
         editMessage.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus && chatAdapter != null && chatAdapter.getItemCount() > 0) {
                 recyclerChat.postDelayed(() -> {
