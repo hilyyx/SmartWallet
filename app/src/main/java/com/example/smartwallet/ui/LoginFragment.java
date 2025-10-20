@@ -20,6 +20,7 @@ import com.example.smartwallet.network.ApiClient;
 import com.example.smartwallet.network.AuthApi;
 import com.example.smartwallet.network.dto.LoginRequest;
 import com.example.smartwallet.network.dto.TokenResponse;
+import com.example.smartwallet.utils.ErrorHandler;
 import com.example.smartwallet.utils.TokenManager;
 
 import retrofit2.Call;
@@ -49,8 +50,26 @@ public class LoginFragment extends Fragment {
         String phone = phoneInput.getText().toString().trim();
         String password = passwordInput.getText().toString();
 
-        if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(password)) {
-            Toast.makeText(requireContext(), R.string.fill_all_fields, Toast.LENGTH_SHORT).show();
+        // Валидация полей
+        boolean isValid = true;
+        
+        if (TextUtils.isEmpty(phone)) {
+            phoneInput.setError("Введите номер телефона");
+            isValid = false;
+        } else if (!isValidPhone(phone)) {
+            phoneInput.setError("Неверный формат номера телефона");
+            isValid = false;
+        }
+        
+        if (TextUtils.isEmpty(password)) {
+            passwordInput.setError("Введите пароль");
+            isValid = false;
+        } else if (password.length() < 6) {
+            passwordInput.setError("Пароль должен содержать минимум 6 символов");
+            isValid = false;
+        }
+        
+        if (!isValid) {
             return;
         }
 
@@ -72,13 +91,19 @@ public class LoginFragment extends Fragment {
             @Override
             public void onFailure(@NonNull Call<TokenResponse> call, @NonNull Throwable t) {
                 setLoading(false);
-                Toast.makeText(requireContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                ErrorHandler.showError(requireContext(), t);
             }
         });
     }
 
     private void setLoading(boolean loading) {
         progressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
+    }
+    
+    private boolean isValidPhone(String phone) {
+        // Простая валидация российского номера телефона
+        String cleanPhone = phone.replaceAll("[^0-9]", "");
+        return cleanPhone.length() >= 10 && cleanPhone.length() <= 11;
     }
 
     private void openWelcome() {
