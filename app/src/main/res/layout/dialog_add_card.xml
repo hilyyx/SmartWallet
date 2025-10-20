@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Добавить карту"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/md_theme_onSurface"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Bank Name -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:boxStrokeColor="@color/md_theme_primary"
+        app:hintTextColor="@color/md_theme_primary">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editBankName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Название банка"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Card Name -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:boxStrokeColor="@color/md_theme_primary"
+        app:hintTextColor="@color/md_theme_primary">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editCardName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Название карты"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Last 4 digits -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:boxStrokeColor="@color/md_theme_primary"
+        app:hintTextColor="@color/md_theme_primary">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editLast4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Последние 4 цифры"
+            android:inputType="number"
+            android:maxLength="4" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Monthly Limit -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        app:boxStrokeColor="@color/md_theme_primary"
+        app:hintTextColor="@color/md_theme_primary">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editLimitMonthly"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Месячный лимит (₽)"
+            android:inputType="numberDecimal" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonCancel"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Отмена"
+            android:layout_marginEnd="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonSave"
+            style="@style/Widget.Material3.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Сохранить" />
+
+    </LinearLayout>
+
+</LinearLayout>

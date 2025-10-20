@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">SmartWallet</string>
+    <string name="login_tab">Вход</string>
+    <string name="register_tab">Регистрация</string>
+    <string name="fill_all_fields">Заполните все поля</string>
+    <string name="auth_failed">Ошибка авторизации</string>
+    <string name="welcome_title">Добро пожаловать в SmartWallet!</string>
+</resources>
