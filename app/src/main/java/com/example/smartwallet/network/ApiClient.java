@@ -41,6 +41,18 @@ public final class ApiClient {
     public static CardsApi getCardsApi() {
         return getRetrofit().create(CardsApi.class);
     }
+    
+    public static CashbackApi getCashbackApi() {
+        return getRetrofit().create(CashbackApi.class);
+    }
+    
+    public static TransactionsApi getTransactionsApi() {
+        return getRetrofit().create(TransactionsApi.class);
+    }
+    
+    public static AssistantApi getAssistantApi() {
+        return getRetrofit().create(AssistantApi.class);
+    }
 }
 
 

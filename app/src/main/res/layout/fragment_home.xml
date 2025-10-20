@@ -2,7 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/md_theme_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -10,14 +11,152 @@
         android:orientation="vertical"
         android:padding="24dp">
 
+        <!-- Active Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="true"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="@color/md_theme_primaryContainer">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Активная карта"
+                    android:textSize="14sp"
+                    android:textColor="@color/md_theme_onPrimaryContainer"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/textActiveCardNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="•••• 1234"
+                    android:textSize="24sp"
+                    android:textColor="@color/md_theme_onPrimaryContainer"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.1"
+                    android:layout_marginBottom="4dp"/>
+
+                <TextView
+                    android:id="@+id/textActiveCardName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Visa Gold"
+                    android:textSize="16sp"
+                    android:textColor="@color/md_theme_onPrimaryContainer"
+                    android:layout_marginBottom="8dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/textActiveCardBank"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Сбербанк"
+                        android:textSize="14sp"
+                        android:textColor="@color/md_theme_onPrimaryContainer"
+                        android:alpha="0.8"/>
+
+                    <TextView
+                        android:id="@+id/textActiveCardCashback"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5% кэшбэк"
+                        android:textSize="14sp"
+                        android:textColor="@color/md_theme_onPrimaryContainer"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Recommended Category -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
             app:cardUseCompatPadding="true"
-            app:strokeWidth="1dp"
-            app:strokeColor="@color/md_outline"
-            android:backgroundTint="@color/md_surface_container">
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/md_theme_surfaceContainerLow">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/textRecommendedCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Рекомендованная категория: 🛒 Еда — 5%"
+                    android:textSize="16sp"
+                    android:textColor="@color/md_theme_onSurface"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="24dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonSmartChoice"
+                style="@style/Widget.Material3.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Умный выбор карты"
+                android:textSize="16sp"
+                app:icon="@drawable/ic_ai_24"
+                app:iconPadding="8dp"
+                app:iconGravity="textStart"
+                app:cornerRadius="16dp"
+                android:layout_marginBottom="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonPay"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Оплатить"
+                android:textSize="16sp"
+                app:icon="@drawable/ic_credit_card"
+                app:iconPadding="8dp"
+                app:iconGravity="textStart"
+                app:cornerRadius="16dp"
+                app:strokeColor="@color/md_theme_primary" />
+
+        </LinearLayout>
+
+        <!-- Recommendation Text -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="1dp"
+            app:cardUseCompatPadding="true"
+            android:backgroundTint="@color/md_theme_surfaceContainerHigh">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -26,30 +165,28 @@
                 android:padding="16dp">
 
                 <TextView
+                    android:id="@+id/textRecommendation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Активная карта"
-                    android:textStyle="bold"
+                    android:text="Рекомендую оплатить картой Тинькофф Black — 5% кэшбэк"
+                    android:textSize="14sp"
                     android:textColor="@color/md_theme_onSurface"
-                    android:textSize="16sp"/>
+                    android:gravity="center"
+                    android:alpha="0.8"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="•••• 1234"
-                    android:textSize="24sp"
-                    android:textColor="@color/md_theme_onSurface"
-                    android:layout_marginTop="8dp"/>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.Material3.Button"
-            android:layout_width="match_parent"
+        <!-- Progress Indicator -->
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Лучший вариант оплаты"
-            app:cornerRadius="16dp" />
+            android:layout_gravity="center"
+            android:layout_marginTop="32dp"
+            android:indeterminate="true"
+            app:indicatorColor="@color/md_theme_primary"
+            android:visibility="gone" />
 
     </LinearLayout>
 

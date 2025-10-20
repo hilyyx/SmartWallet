@@ -27,7 +27,15 @@ public class AuthActivity extends AppCompatActivity {
             else tab.setText(R.string.register_tab);
         }).attach();
     }
+    
+    public void switchToLogin() {
+        ViewPager2 viewPager = findViewById(R.id.authViewPager);
+        if (viewPager != null) {
+            viewPager.setCurrentItem(0, true); // Switch to login tab (position 0)
+        }
+    }
 }
+
 
 
 

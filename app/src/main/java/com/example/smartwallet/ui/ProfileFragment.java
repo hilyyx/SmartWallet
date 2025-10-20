@@ -46,7 +46,7 @@ public class ProfileFragment extends Fragment {
         buttonAiChat = view.findViewById(R.id.buttonAiChat);
         buttonLogout = view.findViewById(R.id.buttonLogout);
 
-        buttonAiChat.setOnClickListener(v -> openAiChat());
+        buttonAiChat.setOnClickListener(v -> openAssistant());
         buttonLogout.setOnClickListener(v -> logout());
 
         loadProfile();
@@ -95,9 +95,9 @@ public class ProfileFragment extends Fragment {
         progress.setVisibility(loading ? View.VISIBLE : View.GONE);
     }
 
-    private void openAiChat() {
-        // TODO: Implement AI chat
-        Toast.makeText(requireContext(), "AI чат в разработке", Toast.LENGTH_SHORT).show();
+    private void openAssistant() {
+        Intent intent = new Intent(requireContext(), AssistantActivity.class);
+        startActivity(intent);
     }
 
     private void logout() {

@@ -67,9 +67,9 @@ public class RegisterFragment extends Fragment {
             public void onResponse(@NonNull Call<TokenResponse> call, @NonNull Response<TokenResponse> response) {
                 setLoading(false);
                 if (response.isSuccessful() && response.body() != null) {
-                    // Save token
-                    TokenManager.getInstance(requireContext()).saveToken(response.body().accessToken);
-                    openWelcome();
+                    // Registration successful, go to login
+                    Toast.makeText(requireContext(), "Регистрация успешна! Войдите в систему.", Toast.LENGTH_SHORT).show();
+                    goToLogin();
                 } else {
                     Toast.makeText(requireContext(), R.string.auth_failed, Toast.LENGTH_SHORT).show();
                 }
@@ -87,10 +87,11 @@ public class RegisterFragment extends Fragment {
         progressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
     }
 
-    private void openWelcome() {
-        Intent intent = new Intent(requireContext(), DashboardActivity.class);
-        startActivity(intent);
-        requireActivity().finish();
+    private void goToLogin() {
+        // Switch to login tab in AuthActivity
+        if (getActivity() instanceof AuthActivity) {
+            ((AuthActivity) getActivity()).switchToLogin();
+        }
     }
 }
 
