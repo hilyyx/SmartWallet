@@ -13,14 +13,14 @@
         android:layout_height="wrap_content"
         android:padding="24dp">
 
-        <!-- Логотип или иконка -->
+        <!-- Логотип -->
         <ImageView
-            android:layout_width="96dp"
-            android:layout_height="96dp"
+            android:layout_width="200dp"
+            android:layout_height="80dp"
             android:layout_marginTop="40dp"
-            android:src="@drawable/ic_person"
-            android:contentDescription="Логотип"
-            android:tint="#388E3C" />
+            android:src="@drawable/smartwallet"
+            android:contentDescription="Smart Wallet"
+            android:scaleType="fitCenter" />
 
         <!-- Карточка с формой -->
         <com.google.android.material.card.MaterialCardView
