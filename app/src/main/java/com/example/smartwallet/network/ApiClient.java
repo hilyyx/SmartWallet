@@ -10,7 +10,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public final class ApiClient {
-    private static final String BASE_URL = "http://192.168.0.110:8000/"; // for Android emulator talking to localhost
+    private static final String BASE_URL = "http://192.168.2.27:8000/"; // for Android emulator talking to localhost
     private static Retrofit retrofitInstance;
 
     private ApiClient() {}

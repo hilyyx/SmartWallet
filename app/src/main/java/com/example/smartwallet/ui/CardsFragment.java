@@ -180,6 +180,10 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
     }
     
     private void showAddCardDialog() {
+        showAddCardDialog(null);
+    }
+
+    public void showAddCardDialog(@Nullable String suggestedCardName) {
         Dialog dialog = new Dialog(requireContext());
         dialog.setContentView(R.layout.dialog_add_card);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -188,6 +192,10 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
         EditText editCardName = dialog.findViewById(R.id.editCardName);
         EditText editLast4 = dialog.findViewById(R.id.editLast4);
         EditText editLimitMonthly = dialog.findViewById(R.id.editLimitMonthly);
+
+        if (!TextUtils.isEmpty(suggestedCardName) && editCardName != null) {
+            editCardName.setText(suggestedCardName);
+        }
         
         dialog.findViewById(R.id.buttonCancel).setOnClickListener(v -> dialog.dismiss());
         dialog.findViewById(R.id.buttonSave).setOnClickListener(v -> {

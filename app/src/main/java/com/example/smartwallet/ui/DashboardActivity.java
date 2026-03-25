@@ -1,6 +1,9 @@
 package com.example.smartwallet.ui;
 
 import android.os.Bundle;
+import android.os.SystemClock;
+
+import androidx.appcompat.app.AlertDialog;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,9 +11,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.smartwallet.R;
+import com.example.smartwallet.nfc.EmvNfcReader;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class DashboardActivity extends AppCompatActivity {
+
+    private int currentTabId = R.id.tab_home;
+    private boolean nfcReaderEnabled = false;
+    private boolean nfcPromptShowing = false;
+    private long lastNfcPromptAtMs = 0L;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -20,6 +29,8 @@ public class DashboardActivity extends AppCompatActivity {
         BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
         bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
+            currentTabId = id;
+            updateNfcReaderState();
             if (id == R.id.tab_home) {
                 switchFragment(new HomeFragment());
                 return true;
@@ -44,6 +55,18 @@ public class DashboardActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateNfcReaderState();
+    }
+
+    @Override
+    protected void onPause() {
+        disableNfcReader();
+        super.onPause();
+    }
+
     private void switchFragment(@NonNull Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()
@@ -55,6 +78,76 @@ public class DashboardActivity extends AppCompatActivity {
                 )
                 .replace(R.id.fragmentContainer, fragment)
                 .commit();
+    }
+
+    private void updateNfcReaderState() {
+        if (currentTabId == R.id.tab_cards) {
+            enableNfcReaderIfNeeded();
+        } else {
+            disableNfcReader();
+        }
+    }
+
+    private void enableNfcReaderIfNeeded() {
+        if (nfcReaderEnabled) return;
+        nfcReaderEnabled = true;
+
+        EmvNfcReader.start(this, new EmvNfcReader.Callback() {
+            @Override
+            public void onEmvCardDetected(@NonNull EmvNfcReader.EmvCardHint hint) {
+                maybePromptAddCard(hint);
+            }
+
+            @Override
+            public void onNfcNotAvailable() {
+                // silent: device without NFC, user can still add manually
+            }
+
+            @Override
+            public void onNfcDisabled() {
+                // silent: NFC disabled, user can enable if they want
+            }
+
+            @Override
+            public void onError(@NonNull String message) {
+                // silent: avoid noisy toasts on every tap
+            }
+        });
+    }
+
+    private void disableNfcReader() {
+        if (!nfcReaderEnabled) return;
+        nfcReaderEnabled = false;
+        EmvNfcReader.stop(this);
+    }
+
+    private void maybePromptAddCard(@NonNull EmvNfcReader.EmvCardHint hint) {
+        long now = SystemClock.elapsedRealtime();
+        if (nfcPromptShowing) return;
+        if (now - lastNfcPromptAtMs < 2500) return; // debounce repeated taps
+        lastNfcPromptAtMs = now;
+        nfcPromptShowing = true;
+
+        String scheme = hint.scheme != null ? hint.scheme : "EMV";
+        String title = "Обнаружена карта (" + scheme + ")";
+        String message = hint.panLast4 != null
+                ? ("Хотите добавить новую карту?\n\nНомер: **** " + hint.panLast4)
+                : "Хотите добавить новую карту?";
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setNegativeButton("Нет", (d, which) -> d.dismiss())
+                .setPositiveButton("Добавить", (d, which) -> {
+                    Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+                    if (f instanceof CardsFragment) {
+                        String suggestedName = hint.scheme != null ? hint.scheme + " карта" : "Новая карта";
+                        ((CardsFragment) f).showAddCardDialog(suggestedName);
+                    }
+                })
+                .setOnDismissListener(d -> nfcPromptShowing = false)
+                .create();
+        dialog.show();
     }
 }
 
