@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/brand_background"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:paddingTop="@dimen/screen_content_extra_top">
 
     <!-- Header with Assistant Info -->
     <LinearLayout
@@ -21,13 +22,9 @@
         <!-- Back Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonBack"
-            style="@style/Widget.Material3.Button.IconButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/Widget.SmartWallet.Button.Icon"
             android:layout_marginEnd="16dp"
-            app:icon="@drawable/ic_arrow_back_24"
-            app:iconTint="@color/brand_primary"
-            android:backgroundTint="@android:color/transparent" />
+            app:icon="@drawable/ic_arrow_back_24" />
 
         <!-- Assistant Avatar -->
         <ImageView
@@ -78,7 +75,8 @@
         android:id="@+id/inputContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
         android:padding="12dp"
         android:background="@color/brand_card_bg"
         android:elevation="8dp"
@@ -86,32 +84,25 @@
 
         <EditText
             android:id="@+id/editMessage"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:hint="Введите сообщение..."
             android:inputType="textMultiLine"
             android:maxLines="3"
             android:padding="12dp"
             android:background="@drawable/chat_input_background"
-            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="12dp"
             android:textColor="@color/brand_text_primary"
             android:textColorHint="@color/brand_text_secondary" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonSend"
-            style="@style/Widget.Material3.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/Widget.SmartWallet.Button"
             android:text="Отправить"
             android:textSize="14sp"
             app:icon="@drawable/ic_send_24"
-            app:iconPadding="4dp"
-            app:cornerRadius="20dp"
-            android:minWidth="0dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:backgroundTint="@color/brand_primary" />
+            app:iconPadding="8dp"
+            app:iconGravity="textStart" />
 
     </LinearLayout>
 

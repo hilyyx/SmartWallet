@@ -37,14 +37,10 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonRetry"
-        style="@style/Widget.Material3.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/Widget.SmartWallet.Button"
         android:text="Повторить"
         android:textSize="16sp"
         app:icon="@drawable/ic_refresh_24"
-        app:iconPadding="8dp"
-        app:cornerRadius="12dp"
-        android:backgroundTint="@color/brand_primary" />
+        app:iconPadding="8dp" />
 
 </LinearLayout>

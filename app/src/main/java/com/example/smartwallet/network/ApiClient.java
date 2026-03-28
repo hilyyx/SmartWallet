@@ -1,5 +1,6 @@
 package com.example.smartwallet.network;
 
+import com.example.smartwallet.BuildConfig;
 import com.example.smartwallet.utils.Logger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -10,7 +11,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public final class ApiClient {
-    private static final String BASE_URL = "http://192.168.2.27:8000/"; // for Android emulator talking to localhost
+    /** Задаётся в local.properties → api.base.url (см. app/build.gradle.kts). */
+    private static final String BASE_URL = BuildConfig.API_BASE_URL;
     private static Retrofit retrofitInstance;
 
     private ApiClient() {}
@@ -59,6 +61,10 @@ public final class ApiClient {
     
     public static AssistantApi getAssistantApi() {
         return getRetrofit().create(AssistantApi.class);
+    }
+
+    public static DemoApi getDemoApi() {
+        return getRetrofit().create(DemoApi.class);
     }
 }
 

@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="false">192.168.0.110</domain>
-    </domain-config>
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="false">192.168.2.27</domain>
-    </domain-config>
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="false">10.0.2.2</domain>
-    </domain-config>
+    <!--
+      Раньше cleartext был только для пары фиксированных IP — любой другой LAN-адрес ПК
+      (например 192.168.1.x) блокировался, и с реального телефона «не заходило» в сеть.
+
+      Для разработки по HTTP разрешаем cleartext глобально. Для продакшена — только HTTPS
+      и отдельный конфиг без cleartext.
+    -->
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
 </network-security-config>
 
 

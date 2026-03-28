@@ -15,12 +15,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.smartwallet.BuildConfig;
 import com.example.smartwallet.R;
 import com.example.smartwallet.network.ApiClient;
 import com.example.smartwallet.network.AuthApi;
 import com.example.smartwallet.network.dto.LoginRequest;
 import com.example.smartwallet.network.dto.TokenResponse;
 import com.example.smartwallet.utils.ErrorHandler;
+import com.example.smartwallet.utils.Logger;
+import com.example.smartwallet.utils.PhoneMaskHelper;
 import com.example.smartwallet.utils.TokenManager;
 
 import retrofit2.Call;
@@ -42,6 +45,7 @@ public class LoginFragment extends Fragment {
         progressBar = view.findViewById(R.id.progress);
         Button loginButton = view.findViewById(R.id.buttonLogin);
 
+        PhoneMaskHelper.attach(phoneInput);
         loginButton.setOnClickListener(v -> attemptLogin());
         return view;
     }
@@ -56,8 +60,8 @@ public class LoginFragment extends Fragment {
         if (TextUtils.isEmpty(phone)) {
             phoneInput.setError("Введите номер телефона");
             isValid = false;
-        } else if (!isValidPhone(phone)) {
-            phoneInput.setError("Неверный формат номера телефона");
+        } else if (!PhoneMaskHelper.isCompleteValid(phone)) {
+            phoneInput.setError("Введите номер полностью: 8-XXX-XXX-XX-XX");
             isValid = false;
         }
         
@@ -75,7 +79,8 @@ public class LoginFragment extends Fragment {
 
         setLoading(true);
         AuthApi api = ApiClient.getAuthApi();
-        api.login(new LoginRequest(phone, password)).enqueue(new Callback<TokenResponse>() {
+        String phoneDigits = PhoneMaskHelper.digitsOnly(phone);
+        api.login(new LoginRequest(phoneDigits, password)).enqueue(new Callback<TokenResponse>() {
             @Override
             public void onResponse(@NonNull Call<TokenResponse> call, @NonNull Response<TokenResponse> response) {
                 setLoading(false);
@@ -84,13 +89,18 @@ public class LoginFragment extends Fragment {
                     TokenManager.getInstance(requireContext()).saveToken(response.body().accessToken);
                     openWelcome();
                 } else {
-                    Toast.makeText(requireContext(), R.string.auth_failed, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(
+                            requireContext(),
+                            ErrorHandler.httpErrorMessage(response),
+                            Toast.LENGTH_LONG
+                    ).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<TokenResponse> call, @NonNull Throwable t) {
                 setLoading(false);
+                Logger.e("LoginFragment", "Login failed; API_BASE_URL=" + BuildConfig.API_BASE_URL, t);
                 ErrorHandler.showError(requireContext(), t);
             }
         });
@@ -100,12 +110,6 @@ public class LoginFragment extends Fragment {
         progressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
     }
     
-    private boolean isValidPhone(String phone) {
-        // Простая валидация российского номера телефона
-        String cleanPhone = phone.replaceAll("[^0-9]", "");
-        return cleanPhone.length() >= 10 && cleanPhone.length() <= 11;
-    }
-
     private void openWelcome() {
         Intent intent = new Intent(requireContext(), DashboardActivity.class);
         startActivity(intent);

@@ -25,6 +25,7 @@ import com.example.smartwallet.network.dto.Recommendation;
 import com.example.smartwallet.network.dto.TransactionRequest;
 import com.example.smartwallet.utils.ErrorHandler;
 import com.example.smartwallet.utils.TokenManager;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
 
@@ -34,6 +35,8 @@ import retrofit2.Response;
 
 public class HomeFragment extends Fragment {
 
+    private MaterialCardView cardActiveCard;
+    private TextView textActiveCardSectionTitle;
     private TextView textActiveCardNumber;
     private TextView textActiveCardName;
     private TextView textActiveCardBank;
@@ -74,6 +77,8 @@ public class HomeFragment extends Fragment {
     }
     
     private void initViews(View view) {
+        cardActiveCard = view.findViewById(R.id.cardActiveCard);
+        textActiveCardSectionTitle = view.findViewById(R.id.textActiveCardSectionTitle);
         textActiveCardNumber = view.findViewById(R.id.textActiveCardNumber);
         textActiveCardName = view.findViewById(R.id.textActiveCardName);
         textActiveCardBank = view.findViewById(R.id.textActiveCardBank);
@@ -150,18 +155,29 @@ public class HomeFragment extends Fragment {
     }
     
     private void updateActiveCardDisplay() {
-        if (activeCard != null) {
-            textActiveCardNumber.setText("•••• " + activeCard.last4);
-            textActiveCardName.setText(activeCard.cardName);
-            textActiveCardBank.setText(activeCard.bankName);
-            
-            // Calculate average cashback
-            if (activeCard.cashbackRules != null) {
-                double avgCashback = (activeCard.cashbackRules.additionalProp1 + 
-                                    activeCard.cashbackRules.additionalProp2 + 
-                                    activeCard.cashbackRules.additionalProp3) / 3.0;
-                textActiveCardCashback.setText(String.format("%.0f%% кэшбэк", avgCashback));
-            }
+        if (activeCard == null || cardActiveCard == null) return;
+
+        BankCardStyle style = BankCardStyle.forCard(activeCard);
+        style.apply(cardActiveCard);
+
+        int primary = style.primaryTextColor(requireContext());
+        int secondary = style.secondaryTextColor(requireContext());
+        textActiveCardSectionTitle.setTextColor(secondary);
+        textActiveCardNumber.setTextColor(primary);
+        textActiveCardName.setTextColor(primary);
+        textActiveCardBank.setTextColor(secondary);
+        textActiveCardBank.setAlpha(1f);
+        textActiveCardCashback.setTextColor(primary);
+
+        textActiveCardNumber.setText("•••• " + activeCard.last4);
+        textActiveCardName.setText(activeCard.cardName);
+        textActiveCardBank.setText(activeCard.bankName);
+
+        if (activeCard.cashbackRules != null) {
+            double avgCashback = (activeCard.cashbackRules.additionalProp1
+                    + activeCard.cashbackRules.additionalProp2
+                    + activeCard.cashbackRules.additionalProp3) / 3.0;
+            textActiveCardCashback.setText(String.format("%.0f%% кэшбэк", avgCashback));
         }
     }
     

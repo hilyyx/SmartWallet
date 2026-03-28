@@ -12,4 +12,109 @@
     </style>
 
     <style name="Theme.SmartWallet" parent="Base.Theme.SmartWallet" />
+
+    <!-- Splash: фон #CCFB55, логотип @drawable/smartwallet; после показа — обычная тема -->
+    <style name="Theme.SmartWallet.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/brand_button_lime</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/smartwallet</item>
+        <item name="postSplashScreenTheme">@style/Theme.SmartWallet</item>
+    </style>
+
+    <!-- Окна «Хотите добавить карту?» и т.п. -->
+    <style name="ThemeOverlay.SmartWallet.MaterialAlertDialog.Rounded" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.SmartWallet.MaterialAlertDialog</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.SmartWallet.MaterialAlertDialog" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">22dp</item>
+    </style>
+
+    <!-- Убирает фиолетовый M3 у нижней панели: весь акцент — зелёный бренд -->
+    <style name="ThemeOverlay.SmartWallet.BottomNav" parent="ThemeOverlay.MaterialComponents.Light">
+        <item name="colorPrimary">@color/brand_primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/brand_secondary</item>
+        <item name="colorOnSecondary">@color/brand_text_primary</item>
+        <item name="colorSecondaryContainer">@color/nav_item_indicator</item>
+        <item name="colorOnSecondaryContainer">@color/nav_item_selected</item>
+        <item name="android:colorControlHighlight">@color/nav_item_ripple</item>
+    </style>
+
+    <!-- 340×65, #CCFB55, скругление 21 -->
+    <style name="Widget.SmartWallet.Button" parent="Widget.Material3.Button">
+        <item name="android:layout_width">@dimen/smartwallet_button_width</item>
+        <item name="android:layout_height">@dimen/smartwallet_button_height</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">@dimen/smartwallet_button_corner</item>
+        <item name="backgroundTint">@color/brand_button_lime</item>
+        <item name="android:textColor">@color/brand_text_primary</item>
+        <item name="iconTint">@color/brand_text_primary</item>
+        <item name="rippleColor">@color/brand_button_ripple</item>
+    </style>
+
+    <!-- Во всю ширину родителя: 340dp в узком диалоге ломает скругление MaterialButton -->
+    <style name="Widget.SmartWallet.Button.FullWidth" parent="Widget.SmartWallet.Button">
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <style name="Widget.SmartWallet.Button.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:layout_width">@dimen/smartwallet_button_width</item>
+        <item name="android:layout_height">@dimen/smartwallet_button_height</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">@dimen/smartwallet_button_corner</item>
+        <item name="backgroundTint">@color/brand_button_lime</item>
+        <item name="strokeWidth">0dp</item>
+        <item name="android:textColor">@color/brand_text_primary</item>
+        <item name="iconTint">@color/brand_text_primary</item>
+        <item name="rippleColor">@color/brand_button_ripple</item>
+    </style>
+
+    <style name="Widget.SmartWallet.Button.Text" parent="Widget.Material3.Button.TextButton">
+        <item name="android:layout_width">@dimen/smartwallet_button_width</item>
+        <item name="android:layout_height">@dimen/smartwallet_button_height</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">@dimen/smartwallet_button_corner</item>
+        <item name="backgroundTint">@color/brand_button_lime</item>
+        <item name="android:textColor">@color/brand_text_primary</item>
+        <item name="iconTint">@color/brand_text_primary</item>
+        <item name="rippleColor">@color/brand_button_ripple</item>
+    </style>
+
+    <!-- Иконка в шапке: та же заливка и радиус, квадрат 65 (340 в ряд не влезает) -->
+    <style name="Widget.SmartWallet.Button.Icon" parent="Widget.Material3.Button.IconButton">
+        <item name="android:layout_width">@dimen/smartwallet_button_height</item>
+        <item name="android:layout_height">@dimen/smartwallet_button_height</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="cornerRadius">@dimen/smartwallet_button_corner</item>
+        <item name="backgroundTint">@color/brand_button_lime</item>
+        <item name="iconTint">@color/brand_text_primary</item>
+        <item name="rippleColor">@color/brand_button_ripple</item>
+    </style>
 </resources>

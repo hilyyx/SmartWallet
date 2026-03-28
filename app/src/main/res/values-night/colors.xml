@@ -12,6 +12,13 @@
     <color name="brand_accent">#4CAF50</color>           <!-- Зелёный - акцентный текст -->
     <color name="brand_border">#333333</color>           <!-- Тёмно-серый - границы карточек -->
     <color name="brand_card_bg">#1E1E1E</color>          <!-- Тёмно-серый - фон карточек -->
+
+    <!-- Bottom navigation — тёмный фон, лаймовые акценты -->
+    <color name="nav_bar_background">#1B1F14</color>
+    <color name="nav_item_selected">#C5E86C</color>
+    <color name="nav_item_unselected">#8A9384</color>
+    <color name="nav_item_indicator">#2D3318</color>
+    <color name="nav_item_ripple">#44C5E86C</color>
     
     <!-- Material 3 Theme Colors (Dark Theme) -->
     <color name="md_theme_primary">#66BB6A</color>

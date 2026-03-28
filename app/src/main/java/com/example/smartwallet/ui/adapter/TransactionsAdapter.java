@@ -1,6 +1,5 @@
 package com.example.smartwallet.ui.adapter;
 
-import android.app.Dialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,6 +80,7 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
         private TextView textDate;
         private TextView textAmount;
         private TextView textCategory;
+        private TextView textSourceBadge;
         private TextView textCard;
         private TextView textCashback;
         
@@ -89,13 +89,13 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
             textDate = itemView.findViewById(R.id.textDate);
             textAmount = itemView.findViewById(R.id.textAmount);
             textCategory = itemView.findViewById(R.id.textCategory);
+            textSourceBadge = itemView.findViewById(R.id.textSourceBadge);
             textCard = itemView.findViewById(R.id.textCard);
             textCashback = itemView.findViewById(R.id.textCashback);
         }
         
         public void bind(Transaction transaction) {
-            // Форматирование даты
-            String formattedDate = DateUtils.formatApiDate(transaction.createdAt);
+            String formattedDate = DateUtils.formatTransactionDisplayDate(transaction);
             textDate.setText(formattedDate);
             
             // Сумма с знаком
@@ -103,6 +103,30 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
             
             // Категория
             textCategory.setText(transaction.category);
+
+            if (textSourceBadge != null) {
+                String src = transaction.source;
+                if (src == null || src.isEmpty()) {
+                    textSourceBadge.setVisibility(View.GONE);
+                } else {
+                    String label;
+                    switch (src.toLowerCase()) {
+                        case "demo":
+                            label = "ДЕМО";
+                            break;
+                        case "import":
+                            label = "ИМПОРТ";
+                            break;
+                        case "manual":
+                            label = "ВРУЧНУЮ";
+                            break;
+                        default:
+                            label = src.toUpperCase();
+                    }
+                    textSourceBadge.setText(label);
+                    textSourceBadge.setVisibility(View.VISIBLE);
+                }
+            }
             
             // Карта (показываем только ID, можно улучшить)
             textCard.setText("Карта #" + transaction.cardId);

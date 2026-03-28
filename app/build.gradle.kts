@@ -1,10 +1,27 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
 }
 
+val localProperties = Properties()
+val localPropsFile = rootProject.file("local.properties")
+if (localPropsFile.exists()) {
+    localPropsFile.inputStream().use { localProperties.load(it) }
+}
+// api.base.url в local.properties (порт как у uvicorn). По умолчанию ниже — типичный LAN для телефона; для эмулятора в local.properties: http://10.0.2.2:8001/
+// Сервер: 0.0.0.0, брандмауэр, после смены URL — пересборка.
+val apiBaseUrlRaw = localProperties.getProperty("api.base.url") ?: "http://192.168.0.5:8001/"
+val apiBaseUrl = if (apiBaseUrlRaw.endsWith("/")) apiBaseUrlRaw else "$apiBaseUrlRaw/"
+val apiBaseUrlForBuildConfig = apiBaseUrl.replace("\\", "\\\\").replace("\"", "\\\"")
+
 android {
     namespace = "com.example.smartwallet"
     compileSdk = 36
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId = "com.example.smartwallet"
@@ -14,6 +31,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrlForBuildConfig\"")
     }
 
     buildTypes {
@@ -42,10 +60,12 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging)
     implementation(libs.viewpager2)
+    implementation(libs.core.splashscreen)
     
     // MPAndroidChart for analytics
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
     
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

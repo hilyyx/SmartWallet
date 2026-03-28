@@ -6,10 +6,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartwallet.R;
 import com.example.smartwallet.network.dto.Card;
+import com.example.smartwallet.ui.BankCardStyle;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +33,16 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
     public void setCards(List<Card> cards) {
         this.cards = cards;
         notifyDataSetChanged();
+    }
+
+    @Nullable
+    public Card getCardAt(int position) {
+        if (position < 0 || position >= cards.size()) return null;
+        return cards.get(position);
+    }
+
+    public int getCardCount() {
+        return cards.size();
     }
     
     public void addCard(Card card) {
@@ -71,6 +84,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
     }
     
     class CardViewHolder extends RecyclerView.ViewHolder {
+        private MaterialCardView cardView;
         private TextView textBankName;
         private TextView textCardName;
         private TextView textLast4;
@@ -78,6 +92,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
         
         public CardViewHolder(@NonNull View itemView) {
             super(itemView);
+            cardView = (MaterialCardView) itemView;
             textBankName = itemView.findViewById(R.id.textBankName);
             textCardName = itemView.findViewById(R.id.textCardName);
             textLast4 = itemView.findViewById(R.id.textLast4);
@@ -91,6 +106,16 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
         }
         
         public void bind(Card card) {
+            BankCardStyle style = BankCardStyle.forCard(card);
+            style.apply(cardView);
+
+            int primary = style.primaryTextColor(itemView.getContext());
+            int secondary = style.secondaryTextColor(itemView.getContext());
+            textBankName.setTextColor(primary);
+            textCardName.setTextColor(primary);
+            textLast4.setTextColor(primary);
+            textCashbackLimit.setTextColor(secondary);
+
             textBankName.setText(card.bankName);
             textCardName.setText(card.cardName);
             textLast4.setText("•••• " + card.last4);

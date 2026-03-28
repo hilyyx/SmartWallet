@@ -9,17 +9,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="32dp">
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:paddingBottom="32dp"
+        android:paddingTop="48dp">
 
         <!-- Active Card -->
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardActiveCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="20dp"
             app:cardElevation="4dp"
             app:cardUseCompatPadding="true"
-            android:layout_marginBottom="32dp"
-            android:backgroundTint="@color/brand_primary">
+            android:layout_marginBottom="32dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -28,6 +32,7 @@
                 android:padding="24dp">
 
                 <TextView
+                    android:id="@+id/textActiveCardSectionTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Активная карта"
@@ -119,33 +124,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:gravity="center_horizontal"
             android:layout_marginBottom="32dp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonSmartChoice"
-                style="@style/Widget.Material3.Button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/Widget.SmartWallet.Button"
                 android:text="Умный выбор карты"
                 android:textSize="16sp"
                 app:icon="@drawable/ic_ai_24"
                 app:iconPadding="8dp"
                 app:iconGravity="textStart"
-                app:cornerRadius="16dp"
                 android:layout_marginBottom="12dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonPay"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/Widget.SmartWallet.Button.Outlined"
                 android:text="Оплатить"
                 android:textSize="16sp"
                 app:icon="@drawable/ic_credit_card"
                 app:iconPadding="8dp"
-                app:iconGravity="textStart"
-                app:cornerRadius="16dp"
-                app:strokeColor="@color/md_theme_primary" />
+                app:iconGravity="textStart" />
 
         </LinearLayout>
 

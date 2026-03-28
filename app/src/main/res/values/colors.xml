@@ -12,6 +12,28 @@
     <color name="brand_accent">#388E3C</color>           <!-- Тёмно-зелёный - акцентный текст -->
     <color name="brand_border">#A5D6A7</color>           <!-- Нежно-зелёный - границы карточек -->
     <color name="brand_card_bg">#FFFFFF</color>          <!-- Белый - фон карточек -->
+
+    <!-- Единый стиль кнопок -->
+    <color name="brand_button_lime">#CCFB55</color>
+    <color name="brand_button_ripple">#40000000</color>
+
+    <!-- Диалог добавления карты -->
+    <color name="add_card_field_fill">#F4F5F7</color>
+    <color name="add_card_edit_gray">#6D7179</color>
+    <color name="add_card_hint_gray">#9EA2AD</color>
+
+    <!-- Bottom navigation — лаймово-светлый блок -->
+    <color name="nav_bar_background">#EEF6D4</color>
+    <color name="nav_item_selected">#5A7F14</color>
+    <color name="nav_item_unselected">#7A8570</color>
+    <color name="nav_item_indicator">#D8EF9A</color>
+    <color name="nav_item_ripple">#334CAF50</color>
+
+    <!-- Текст на карточках банков -->
+    <color name="bank_card_text_on_dark">#FFFFFF</color>
+    <color name="bank_card_text_on_dark_muted">#B3FFFFFF</color>
+    <color name="bank_card_text_on_light">#1A1A1A</color>
+    <color name="bank_card_text_on_light_muted">#99000000</color>
     
     <!-- Material 3 Theme Colors (updated with brand colors) -->
     <color name="md_theme_primary">#4CAF50</color>

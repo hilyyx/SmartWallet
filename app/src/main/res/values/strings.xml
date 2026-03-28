@@ -5,4 +5,17 @@
     <string name="fill_all_fields">Заполните все поля</string>
     <string name="auth_failed">Ошибка авторизации</string>
     <string name="welcome_title">Добро пожаловать в SmartWallet!</string>
+
+    <string name="demo_presentation_title">Демо для презентации</string>
+    <string name="demo_presentation_hint">Демо не подключает банки: данные условные. Импорт операций — имитация выписки.</string>
+    <string name="demo_confirm_title">Загрузить демо-данные?</string>
+    <string name="demo_confirm_message">Стереть мои карты, историю операций и рекомендации и подставить демо (3 карты, 12 операций)?</string>
+    <string name="demo_confirm_yes">Стереть и загрузить</string>
+    <string name="demo_success">Демо загружено: карт %1$d, операций %2$d</string>
+    <string name="demo_error_409">У вас уже есть карты. Повторите с параметром reset=true или сначала удалите карты. Детали: %1$s</string>
+    <string name="profile_avatar_cd">Аватар, нажмите чтобы сменить</string>
+    <string name="profile_avatar_upload_ok">Аватар обновлён</string>
+    <string name="profile_avatar_no_endpoint">Сервер не принял файл. Нужен POST multipart на auth/profile/avatar (поле file).</string>
+    <string name="add_card_close_cd">Закрыть</string>
+    <string name="api_url_emulator_only">В проекте указан 10.0.2.2 — это адрес «ПК из эмулятора». На обычном телефоне не сработает. В local.properties задайте IP вашего компьютера в Wi‑Fi и пересоберите APK.</string>
 </resources>

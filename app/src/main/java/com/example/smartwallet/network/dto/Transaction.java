@@ -10,6 +10,12 @@ public class Transaction {
     public int cardId;
     public double amount;
     public String category;
+    /** manual | import | demo */
+    public String source;
+    @SerializedName("external_id")
+    public String externalId;
+    @SerializedName("occurred_at")
+    public String occurredAt;
     @SerializedName("cashback_earned")
     public double cashbackEarned;
     @SerializedName("created_at")

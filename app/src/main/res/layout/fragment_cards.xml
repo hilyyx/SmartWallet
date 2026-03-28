@@ -3,7 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="32dp"
+    android:paddingStart="32dp"
+    android:paddingEnd="32dp"
+    android:paddingBottom="32dp"
+    android:paddingTop="48dp"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     android:background="@color/brand_background">
 
     <!-- Header -->
@@ -12,7 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginBottom="32dp">
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="12dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -32,205 +38,250 @@
 
     </LinearLayout>
 
-    <!-- Cards RecyclerView -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerCards"
-        android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:layout_below="@id/headerLayout"
-        android:layout_marginBottom="24dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp" />
-
-    <!-- Empty State -->
+    <!-- Нижний блок: выбранная карта + статистика (без прокрутки) -->
     <LinearLayout
-        android:id="@+id/emptyState"
+        android:id="@+id/bottomCardsBlock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:visibility="gone">
-
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/ic_credit_card"
-            android:tint="@color/md_theme_onSurfaceVariant"
-            android:alpha="0.6" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="У вас пока нет карт"
-            android:textSize="18sp"
-            android:textColor="@color/md_theme_onSurface"
-            android:layout_marginTop="16dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Добавьте первую карту, нажав на кнопку +"
-            android:textSize="14sp"
-            android:textColor="@color/md_theme_onSurfaceVariant"
-            android:layout_marginTop="8dp"
-            android:gravity="center" />
-
-    </LinearLayout>
-
-    <!-- Error State -->
-    <include
-        android:id="@+id/errorState"
-        layout="@layout/error_state"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone" />
-
-    <!-- Progress Indicator -->
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:indeterminate="true"
-        app:indicatorColor="@color/md_theme_primary"
-        android:visibility="gone" />
-
-    <!-- Bottom Content -->
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/recyclerCards"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
         android:layout_above="@id/fabAddCard"
-        android:layout_marginBottom="24dp">
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardSelectedCardInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginBottom="12dp"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/brand_card_bg"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:cardUseCompatPadding="true">
 
-            <!-- Statistics Card -->
-            <com.google.android.material.card.MaterialCardView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                app:cardUseCompatPadding="true"
-                android:layout_marginBottom="16dp"
-                android:backgroundTint="@color/brand_card_bg">
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Выбранная карта"
+                    android:textSize="12sp"
+                    android:textColor="@color/md_theme_onSurfaceVariant" />
+
+                <TextView
+                    android:id="@+id/textSelectedCardTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/brand_text_primary" />
+
+                <TextView
+                    android:id="@+id/textSelectedCardDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:letterSpacing="0.08"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/brand_text_secondary" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:cardUseCompatPadding="true"
+            android:backgroundTint="@color/brand_card_bg">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Статистика карт"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/brand_text_primary"
+                    android:layout_marginBottom="16dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Статистика карт"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/brand_text_primary"
-                        android:layout_marginBottom="16dp" />
+                    android:orientation="horizontal"
+                    android:weightSum="3">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:weightSum="3">
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
 
-                        <!-- Total Cards -->
-                        <LinearLayout
-                            android:layout_width="0dp"
+                        <TextView
+                            android:id="@+id/textTotalCards"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:gravity="center">
+                            android:text="0"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/md_theme_primary" />
 
-                            <TextView
-                                android:id="@+id/textTotalCards"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0"
-                                android:textSize="24sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/md_theme_primary" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Всего карт"
-                                android:textSize="12sp"
-                                android:textColor="@color/md_theme_onSurfaceVariant" />
-
-                        </LinearLayout>
-
-                        <!-- Total Limit -->
-                        <LinearLayout
-                            android:layout_width="0dp"
+                        <TextView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:gravity="center">
+                            android:text="Всего карт"
+                            android:textSize="12sp"
+                            android:textColor="@color/md_theme_onSurfaceVariant" />
 
-                            <TextView
-                                android:id="@+id/textTotalLimit"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0 ₽"
-                                android:textSize="20sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/md_theme_primary" />
+                    </LinearLayout>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Общий лимит"
-                                android:textSize="12sp"
-                                android:textColor="@color/md_theme_onSurfaceVariant" />
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
 
-                        </LinearLayout>
-
-                        <!-- Average Cashback -->
-                        <LinearLayout
-                            android:layout_width="0dp"
+                        <TextView
+                            android:id="@+id/textTotalLimit"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:gravity="center">
+                            android:text="0 ₽"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/md_theme_primary" />
 
-                            <TextView
-                                android:id="@+id/textAvgCashback"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0%"
-                                android:textSize="20sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/md_theme_primary" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Общий лимит"
+                            android:textSize="12sp"
+                            android:textColor="@color/md_theme_onSurfaceVariant" />
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Средний кэшбэк"
-                                android:textSize="12sp"
-                                android:textColor="@color/md_theme_onSurfaceVariant" />
+                    </LinearLayout>
 
-                        </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/textAvgCashback"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0%"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/md_theme_primary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Средний кэшбэк"
+                            android:textSize="12sp"
+                            android:textColor="@color/md_theme_onSurfaceVariant" />
 
                     </LinearLayout>
 
                 </LinearLayout>
 
-            </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
 
+        </com.google.android.material.card.MaterialCardView>
 
-</LinearLayout>
+    </LinearLayout>
 
-    </ScrollView>
+    <!-- Карусель + пустое состояние между шапкой и нижним блоком -->
+    <FrameLayout
+        android:id="@+id/cardsMiddleArea"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/headerLayout"
+        android:layout_above="@id/bottomCardsBlock"
+        android:layout_marginTop="4dp">
 
-    <!-- Floating Action Button -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerCards"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:minHeight="200dp"
+            android:paddingStart="12dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="8dp" />
+
+        <LinearLayout
+            android:id="@+id/emptyState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/ic_credit_card"
+                android:tint="@color/md_theme_onSurfaceVariant"
+                android:alpha="0.6" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="У вас пока нет карт"
+                android:textSize="18sp"
+                android:textColor="@color/md_theme_onSurface"
+                android:layout_marginTop="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Добавьте первую карту, нажав на кнопку +"
+                android:textSize="14sp"
+                android:textColor="@color/md_theme_onSurfaceVariant"
+                android:layout_marginTop="8dp"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+        <include
+            android:id="@+id/errorState"
+            layout="@layout/error_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            app:indicatorColor="@color/md_theme_primary"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddCard"
         android:layout_width="wrap_content"
@@ -239,9 +290,9 @@
         android:layout_alignParentEnd="true"
         android:layout_margin="16dp"
         android:src="@drawable/ic_add_24"
-        app:tint="@color/md_theme_onPrimary"
-        app:backgroundTint="@color/md_theme_primary" />
+        app:fabCustomSize="@dimen/smartwallet_button_height"
+        app:maxImageSize="28dp"
+        app:tint="@color/brand_text_primary"
+        app:backgroundTint="@color/brand_button_lime" />
 
 </RelativeLayout>
-
-

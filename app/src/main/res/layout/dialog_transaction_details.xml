@@ -4,7 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="24dp">
+    android:gravity="center_horizontal"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp"
+    android:paddingBottom="24dp"
+    android:paddingTop="40dp">
 
     <TextView
         android:layout_width="wrap_content"
@@ -94,6 +98,33 @@
 
     </LinearLayout>
 
+    <!-- Источник (demo / import / manual) -->
+    <LinearLayout
+        android:id="@+id/rowTransactionSource"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Источник:"
+            android:textSize="16sp"
+            android:textColor="@color/brand_text_secondary" />
+
+        <TextView
+            android:id="@+id/textTransactionSource"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="demo"
+            android:textSize="16sp"
+            android:textColor="@color/brand_text_primary" />
+
+    </LinearLayout>
+
     <!-- Карта -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -176,11 +207,8 @@
     <!-- Кнопка закрытия -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonClose"
-        style="@style/Widget.Material3.Button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/Widget.SmartWallet.Button"
         android:text="Закрыть"
-        android:textSize="16sp"
-        app:cornerRadius="12dp" />
+        android:textSize="16sp" />
 
 </LinearLayout>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="smartwallet_button_width">340dp</dimen>
+    <dimen name="smartwallet_button_height">65dp</dimen>
+    <dimen name="smartwallet_button_corner">21dp</dimen>
+    <!-- Сдвиг контента вниз на основных экранах (не вход/регистрация) -->
+    <dimen name="screen_content_extra_top">16dp</dimen>
+</resources>

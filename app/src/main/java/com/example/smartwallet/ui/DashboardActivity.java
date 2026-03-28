@@ -3,8 +3,6 @@ package com.example.smartwallet.ui;
 import android.os.Bundle;
 import android.os.SystemClock;
 
-import androidx.appcompat.app.AlertDialog;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import com.example.smartwallet.R;
 import com.example.smartwallet.nfc.EmvNfcReader;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class DashboardActivity extends AppCompatActivity {
 
@@ -27,32 +26,40 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
+        bottomNav.setClipChildren(false);
         bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             currentTabId = id;
             updateNfcReaderState();
+            boolean handled;
             if (id == R.id.tab_home) {
                 switchFragment(new HomeFragment());
-                return true;
+                handled = true;
             } else if (id == R.id.tab_cards) {
                 switchFragment(new CardsFragment());
-                return true;
+                handled = true;
             } else if (id == R.id.tab_history) {
                 switchFragment(new HistoryFragment());
-                return true;
+                handled = true;
             } else if (id == R.id.tab_analytics) {
                 switchFragment(new AnalyticsFragment());
-                return true;
+                handled = true;
             } else if (id == R.id.tab_profile) {
                 switchFragment(new ProfileFragment());
-                return true;
+                handled = true;
+            } else {
+                handled = false;
             }
-            return false;
+            if (handled) {
+                bottomNav.post(() -> BottomNavSelectionHelper.applyLift(bottomNav, id));
+            }
+            return handled;
         });
 
         if (savedInstanceState == null) {
             bottomNav.setSelectedItemId(R.id.tab_home);
         }
+        bottomNav.post(() -> BottomNavSelectionHelper.applyLift(bottomNav, bottomNav.getSelectedItemId()));
     }
 
     @Override
@@ -121,6 +128,16 @@ public class DashboardActivity extends AppCompatActivity {
         EmvNfcReader.stop(this);
     }
 
+    /** Вызвать после успешного POST /demo/seed — обновить текущую вкладку, если это карты или история. */
+    public void notifyDemoSeeded() {
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+        if (f instanceof CardsFragment) {
+            ((CardsFragment) f).reloadFromServer();
+        } else if (f instanceof HistoryFragment) {
+            ((HistoryFragment) f).reloadFromServer();
+        }
+    }
+
     private void maybePromptAddCard(@NonNull EmvNfcReader.EmvCardHint hint) {
         long now = SystemClock.elapsedRealtime();
         if (nfcPromptShowing) return;
@@ -134,7 +151,7 @@ public class DashboardActivity extends AppCompatActivity {
                 ? ("Хотите добавить новую карту?\n\nНомер: **** " + hint.panLast4)
                 : "Хотите добавить новую карту?";
 
-        AlertDialog dialog = new AlertDialog.Builder(this)
+        new MaterialAlertDialogBuilder(this, R.style.ThemeOverlay_SmartWallet_MaterialAlertDialog_Rounded)
                 .setTitle(title)
                 .setMessage(message)
                 .setNegativeButton("Нет", (d, which) -> d.dismiss())
@@ -146,8 +163,7 @@ public class DashboardActivity extends AppCompatActivity {
                     }
                 })
                 .setOnDismissListener(d -> nfcPromptShowing = false)
-                .create();
-        dialog.show();
+                .show();
     }
 }
 

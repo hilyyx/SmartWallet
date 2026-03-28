@@ -1,6 +1,8 @@
 package com.example.smartwallet.ui;
 
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
@@ -29,6 +32,7 @@ import com.example.smartwallet.network.dto.CashbackRules;
 import com.example.smartwallet.ui.adapter.CardsAdapter;
 import com.example.smartwallet.utils.ErrorHandler;
 import com.example.smartwallet.utils.TokenManager;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -45,9 +49,13 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
     private View errorState;
     private ProgressBar progress;
     private FloatingActionButton fabAddCard;
+    private MaterialCardView cardSelectedCardInfo;
+    private TextView textSelectedCardTitle;
+    private TextView textSelectedCardDetails;
     private CardsAdapter cardsAdapter;
     private CardsApi cardsApi;
     private TokenManager tokenManager;
+    private final PagerSnapHelper snapHelper = new PagerSnapHelper();
     
     // Statistics views
     private TextView textTotalCards;
@@ -77,6 +85,9 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
         errorState = view.findViewById(R.id.errorState);
         progress = view.findViewById(R.id.progress);
         fabAddCard = view.findViewById(R.id.fabAddCard);
+        cardSelectedCardInfo = view.findViewById(R.id.cardSelectedCardInfo);
+        textSelectedCardTitle = view.findViewById(R.id.textSelectedCardTitle);
+        textSelectedCardDetails = view.findViewById(R.id.textSelectedCardDetails);
         
         // Statistics views
         textTotalCards = view.findViewById(R.id.textTotalCards);
@@ -98,9 +109,15 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
         recyclerCards.setLayoutManager(layoutManager);
         recyclerCards.setAdapter(cardsAdapter);
         
-        // Add snap effect for smooth card centering
-        PagerSnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(recyclerCards);
+        recyclerCards.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    updateSelectedCardInfo();
+                }
+            }
+        });
     }
     
     private void setupClickListeners() {
@@ -143,6 +160,11 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
         }
     }
     
+    /** После демо-сидинга: обновить список, если вкладка «Карты» на экране. */
+    public void reloadFromServer() {
+        loadCards();
+    }
+
     private void loadCards() {
         String token = tokenManager.getToken();
         if (token == null) {
@@ -186,7 +208,10 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
     public void showAddCardDialog(@Nullable String suggestedCardName) {
         Dialog dialog = new Dialog(requireContext());
         dialog.setContentView(R.layout.dialog_add_card);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
         
         EditText editBankName = dialog.findViewById(R.id.editBankName);
         EditText editCardName = dialog.findViewById(R.id.editCardName);
@@ -240,7 +265,8 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
         
         try {
             double limit = Double.parseDouble(limitStr);
-            CashbackRules cashbackRules = new CashbackRules(1, 2, 3); // Default values (1%, 2%, 3%)
+            // Уходит на бэкенд; в списке карт отображаются значения из ответа GET /cards (не подставляются на клиенте).
+            CashbackRules cashbackRules = new CashbackRules(1, 2, 3);
             CardRequest request = new CardRequest(bankName, cardName, last4, cashbackRules, limit);
             
             String authToken = "Bearer " + token;
@@ -284,12 +310,47 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
         hideErrorState();
         emptyState.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
         recyclerCards.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
+        if (cardSelectedCardInfo != null) {
+            cardSelectedCardInfo.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
+        }
+        if (!isEmpty) {
+            recyclerCards.post(() -> updateSelectedCardInfo());
+        }
+    }
+
+    private void updateSelectedCardInfo() {
+        if (textSelectedCardTitle == null || textSelectedCardDetails == null || cardsAdapter == null) return;
+        if (cardsAdapter.getCardCount() == 0) return;
+        LinearLayoutManager lm = (LinearLayoutManager) recyclerCards.getLayoutManager();
+        if (lm == null) return;
+        View snap = snapHelper.findSnapView(lm);
+        int pos = snap != null ? lm.getPosition(snap) : 0;
+        if (pos < 0) pos = 0;
+        Card c = cardsAdapter.getCardAt(pos);
+        if (c == null) return;
+        String title = !TextUtils.isEmpty(c.cardName) ? c.cardName : (c.bankName != null ? c.bankName : "Карта");
+        textSelectedCardTitle.setText(title);
+        textSelectedCardDetails.setText("•••• " + (c.last4 != null ? c.last4 : "—"));
+    }
+
+    @NonNull
+    private String formatCardSummaryMessage(@NonNull Card c) {
+        String name = !TextUtils.isEmpty(c.cardName) ? c.cardName : (c.bankName != null ? c.bankName : "Карта");
+        return name + "\n•••• " + (c.last4 != null ? c.last4 : "—");
+    }
+
+    private void showCardDetailsDialog(@NonNull Card card) {
+        String dialogTitle = !TextUtils.isEmpty(card.bankName) ? card.bankName : "Карта";
+        new MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_SmartWallet_MaterialAlertDialog_Rounded)
+                .setTitle(dialogTitle)
+                .setMessage(formatCardSummaryMessage(card))
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
     }
     
     @Override
     public void onCardClick(Card card) {
-        Toast.makeText(requireContext(), "Карта: " + card.cardName, Toast.LENGTH_SHORT).show();
-        // TODO: Implement card details or edit functionality
+        showCardDetailsDialog(card);
     }
     
     private void updateStatistics(List<Card> cards) {

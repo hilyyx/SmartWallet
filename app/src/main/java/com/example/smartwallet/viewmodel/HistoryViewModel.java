@@ -78,7 +78,6 @@ public class HistoryViewModel extends ViewModel {
         transactionsApi.getTransactions(authToken).enqueue(new Callback<List<Transaction>>() {
             @Override
             public void onResponse(Call<List<Transaction>> call, Response<List<Transaction>> response) {
-                isLoading.setValue(false);
                 if (response.isSuccessful() && response.body() != null) {
                     Logger.i("HistoryViewModel", "Transactions loaded successfully: " + response.body().size() + " items");
                     transactionList = response.body();
@@ -88,13 +87,14 @@ public class HistoryViewModel extends ViewModel {
                     Logger.e("HistoryViewModel", errorMsg);
                     error.setValue(errorMsg);
                 }
+                isLoading.setValue(false);
             }
 
             @Override
             public void onFailure(Call<List<Transaction>> call, Throwable t) {
-                isLoading.setValue(false);
                 Logger.e("HistoryViewModel", "Failed to load transactions", t);
                 error.setValue(ErrorHandler.getErrorMessage(t));
+                isLoading.setValue(false);
             }
         });
     }

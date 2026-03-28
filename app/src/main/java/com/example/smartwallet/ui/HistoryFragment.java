@@ -21,8 +21,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.smartwallet.R;
 import com.example.smartwallet.network.dto.Transaction;
 import com.example.smartwallet.ui.adapter.TransactionsAdapter;
+import com.example.smartwallet.utils.DateUtils;
 import com.example.smartwallet.utils.TokenManager;
 import com.example.smartwallet.viewmodel.HistoryViewModel;
+
+import java.util.List;
 
 public class HistoryFragment extends Fragment implements TransactionsAdapter.OnTransactionClickListener {
 
@@ -98,12 +101,20 @@ public class HistoryFragment extends Fragment implements TransactionsAdapter.OnT
     private void updateEmptyState(boolean isEmpty) {
         emptyState.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
         recyclerHistory.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
+        // Иначе половина экрана уходит под пустой SwipeRefresh — «пуста» оказывается слишком низко
+        swipeRefresh.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
     }
     
     private void setLoading(boolean loading) {
         progress.setVisibility(loading ? View.VISIBLE : View.GONE);
-        recyclerHistory.setVisibility(loading ? View.GONE : View.VISIBLE);
-        emptyState.setVisibility(loading ? View.GONE : View.GONE);
+        if (loading) {
+            recyclerHistory.setVisibility(View.GONE);
+            emptyState.setVisibility(View.GONE);
+            swipeRefresh.setVisibility(View.VISIBLE);
+        } else {
+            List<Transaction> t = historyViewModel.getTransactions().getValue();
+            updateEmptyState(t == null || t.isEmpty());
+        }
     }
     
     @Override
@@ -123,14 +134,25 @@ public class HistoryFragment extends Fragment implements TransactionsAdapter.OnT
         TextView textCard = dialog.findViewById(R.id.textCard);
         TextView textMcc = dialog.findViewById(R.id.textMcc);
         TextView textCashback = dialog.findViewById(R.id.textCashback);
+        TextView textSource = dialog.findViewById(R.id.textTransactionSource);
+        View rowSource = dialog.findViewById(R.id.rowTransactionSource);
         
         // Заполнить данные
         textAmount.setText(String.format("%.2f ₽", transaction.amount));
         textCategory.setText(transaction.category);
-        textDate.setText(formatDate(transaction.createdAt));
+        textDate.setText(DateUtils.formatTransactionDisplayDate(transaction));
         textCard.setText("Карта #" + transaction.cardId);
         textMcc.setText("5812"); // MCC для категории "Еда"
         textCashback.setText(String.format("%.2f ₽", transaction.cashbackEarned));
+
+        if (rowSource != null && textSource != null) {
+            if (transaction.source == null || transaction.source.isEmpty()) {
+                rowSource.setVisibility(View.GONE);
+            } else {
+                rowSource.setVisibility(View.VISIBLE);
+                textSource.setText(transaction.source);
+            }
+        }
         
         // Кнопка закрытия
         dialog.findViewById(R.id.buttonClose).setOnClickListener(v -> dialog.dismiss());
@@ -138,14 +160,10 @@ public class HistoryFragment extends Fragment implements TransactionsAdapter.OnT
         dialog.show();
     }
     
-    private String formatDate(String dateString) {
-        try {
-            java.text.SimpleDateFormat inputFormat = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", java.util.Locale.getDefault());
-            java.text.SimpleDateFormat outputFormat = new java.text.SimpleDateFormat("dd.MM.yyyy HH:mm", java.util.Locale.getDefault());
-            java.util.Date date = inputFormat.parse(dateString);
-            return outputFormat.format(date);
-        } catch (java.text.ParseException e) {
-            return dateString;
+    /** Обновить список после демо-сидинга и т.п., если фрагмент на экране. */
+    public void reloadFromServer() {
+        if (historyViewModel != null) {
+            historyViewModel.loadTransactions();
         }
     }
 }

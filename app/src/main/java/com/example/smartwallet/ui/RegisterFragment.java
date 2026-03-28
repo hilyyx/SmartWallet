@@ -21,6 +21,7 @@ import com.example.smartwallet.network.AuthApi;
 import com.example.smartwallet.network.dto.RegisterRequest;
 import com.example.smartwallet.network.dto.TokenResponse;
 import com.example.smartwallet.utils.ErrorHandler;
+import com.example.smartwallet.utils.PhoneMaskHelper;
 import com.example.smartwallet.utils.TokenManager;
 
 import retrofit2.Call;
@@ -46,6 +47,7 @@ public class RegisterFragment extends Fragment {
         progressBar = view.findViewById(R.id.progress);
         Button registerButton = view.findViewById(R.id.buttonRegister);
 
+        PhoneMaskHelper.attach(phoneInput);
         registerButton.setOnClickListener(v -> attemptRegister());
         return view;
     }
@@ -62,8 +64,8 @@ public class RegisterFragment extends Fragment {
         if (TextUtils.isEmpty(phone)) {
             phoneInput.setError("Введите номер телефона");
             isValid = false;
-        } else if (!isValidPhone(phone)) {
-            phoneInput.setError("Неверный формат номера телефона");
+        } else if (!PhoneMaskHelper.isCompleteValid(phone)) {
+            phoneInput.setError("Введите номер полностью: 8-XXX-XXX-XX-XX");
             isValid = false;
         }
         
@@ -97,7 +99,8 @@ public class RegisterFragment extends Fragment {
 
         setLoading(true);
         AuthApi api = ApiClient.getAuthApi();
-        api.register(new RegisterRequest(phone, email, name, password)).enqueue(new Callback<TokenResponse>() {
+        String phoneDigits = PhoneMaskHelper.digitsOnly(phone);
+        api.register(new RegisterRequest(phoneDigits, email, name, password)).enqueue(new Callback<TokenResponse>() {
             @Override
             public void onResponse(@NonNull Call<TokenResponse> call, @NonNull Response<TokenResponse> response) {
                 setLoading(false);
@@ -106,7 +109,11 @@ public class RegisterFragment extends Fragment {
                     Toast.makeText(requireContext(), "Регистрация успешна! Войдите в систему.", Toast.LENGTH_SHORT).show();
                     goToLogin();
                 } else {
-                    Toast.makeText(requireContext(), R.string.auth_failed, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(
+                            requireContext(),
+                            ErrorHandler.httpErrorMessage(response),
+                            Toast.LENGTH_LONG
+                    ).show();
                 }
             }
 
@@ -120,12 +127,6 @@ public class RegisterFragment extends Fragment {
 
     private void setLoading(boolean loading) {
         progressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
-    }
-    
-    private boolean isValidPhone(String phone) {
-        // Простая валидация российского номера телефона
-        String cleanPhone = phone.replaceAll("[^0-9]", "");
-        return cleanPhone.length() >= 10 && cleanPhone.length() <= 11;
     }
     
     private boolean isValidEmail(String email) {
