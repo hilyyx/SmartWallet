@@ -23,6 +23,7 @@ import com.example.smartwallet.network.dto.BestCardResponse;
 import com.example.smartwallet.network.dto.Card;
 import com.example.smartwallet.network.dto.Recommendation;
 import com.example.smartwallet.network.dto.TransactionRequest;
+import com.example.smartwallet.utils.CashbackRulesGenerator;
 import com.example.smartwallet.utils.ErrorHandler;
 import com.example.smartwallet.utils.TokenManager;
 import com.google.android.material.card.MaterialCardView;
@@ -173,11 +174,11 @@ public class HomeFragment extends Fragment {
         textActiveCardName.setText(activeCard.cardName);
         textActiveCardBank.setText(activeCard.bankName);
 
-        if (activeCard.cashbackRules != null) {
-            double avgCashback = (activeCard.cashbackRules.additionalProp1
-                    + activeCard.cashbackRules.additionalProp2
-                    + activeCard.cashbackRules.additionalProp3) / 3.0;
+        if (activeCard.cashbackRules != null && !activeCard.cashbackRules.isEmpty()) {
+            double avgCashback = CashbackRulesGenerator.averagePercent(activeCard.cashbackRules);
             textActiveCardCashback.setText(String.format("%.0f%% кэшбэк", avgCashback));
+        } else {
+            textActiveCardCashback.setText("—");
         }
     }
     

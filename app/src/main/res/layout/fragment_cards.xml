@@ -91,6 +91,26 @@
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="@color/brand_text_secondary" />
+
+                <TextView
+                    android:id="@+id/textSelectedCardCashbackLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Кэшбэк по категориям"
+                    android:textSize="12sp"
+                    android:textColor="@color/md_theme_onSurfaceVariant"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/textSelectedCardCategories"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:lineSpacingExtra="3dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/brand_text_primary"
+                    android:visibility="gone" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 

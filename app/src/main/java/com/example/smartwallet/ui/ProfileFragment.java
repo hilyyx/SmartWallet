@@ -26,9 +26,13 @@ import com.example.smartwallet.BuildConfig;
 import com.example.smartwallet.R;
 import com.example.smartwallet.network.ApiClient;
 import com.example.smartwallet.network.AuthApi;
+import com.example.smartwallet.network.CardsApi;
 import com.example.smartwallet.network.DemoApi;
+import com.example.smartwallet.network.dto.Card;
+import com.example.smartwallet.network.dto.CardCashbackPatchRequest;
 import com.example.smartwallet.network.dto.DemoSeedResponse;
 import com.example.smartwallet.network.dto.ProfileResponse;
+import com.example.smartwallet.utils.CashbackRulesGenerator;
 import com.example.smartwallet.utils.TokenManager;
 import com.google.android.material.button.MaterialButton;
 
@@ -37,6 +41,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -130,9 +137,7 @@ public class ProfileFragment extends Fragment {
                             getString(R.string.demo_success, body.cardsCreated, body.transactionsCreated),
                             Toast.LENGTH_LONG
                     ).show();
-                    if (getActivity() instanceof DashboardActivity) {
-                        ((DashboardActivity) getActivity()).notifyDemoSeeded();
-                    }
+                    randomizeCashbackOnAllCardsThenNotify(authToken);
                     return;
                 }
 
@@ -166,6 +171,54 @@ public class ProfileFragment extends Fragment {
                 Toast.makeText(requireContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    /** После демо: случайные категории на каждую карту (PATCH), затем обновление вкладок. */
+    private void randomizeCashbackOnAllCardsThenNotify(@NonNull String authToken) {
+        CardsApi cardsApi = ApiClient.getCardsApi();
+        cardsApi.getCards(authToken).enqueue(new Callback<List<Card>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Card>> call, @NonNull Response<List<Card>> response) {
+                if (!response.isSuccessful() || response.body() == null || response.body().isEmpty()) {
+                    notifyDashboardDemoSeeded();
+                    return;
+                }
+                List<Card> list = response.body();
+                AtomicInteger pending = new AtomicInteger(list.size());
+                Random rnd = new Random();
+                Runnable done = () -> {
+                    if (pending.decrementAndGet() == 0) {
+                        notifyDashboardDemoSeeded();
+                    }
+                };
+                for (Card card : list) {
+                    CardCashbackPatchRequest patch = new CardCashbackPatchRequest();
+                    patch.cashbackRules = CashbackRulesGenerator.generate(rnd);
+                    cardsApi.patchCardCashback(authToken, card.id, patch).enqueue(new Callback<Card>() {
+                        @Override
+                        public void onResponse(@NonNull Call<Card> c, @NonNull Response<Card> r) {
+                            done.run();
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call<Card> c, @NonNull Throwable t) {
+                            done.run();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<Card>> call, @NonNull Throwable t) {
+                notifyDashboardDemoSeeded();
+            }
+        });
+    }
+
+    private void notifyDashboardDemoSeeded() {
+        if (getActivity() instanceof DashboardActivity) {
+            ((DashboardActivity) getActivity()).notifyDemoSeeded();
+        }
     }
 
     @Nullable

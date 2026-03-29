@@ -28,8 +28,8 @@ import com.example.smartwallet.network.ApiClient;
 import com.example.smartwallet.network.CardsApi;
 import com.example.smartwallet.network.dto.Card;
 import com.example.smartwallet.network.dto.CardRequest;
-import com.example.smartwallet.network.dto.CashbackRules;
 import com.example.smartwallet.ui.adapter.CardsAdapter;
+import com.example.smartwallet.utils.CashbackRulesGenerator;
 import com.example.smartwallet.utils.ErrorHandler;
 import com.example.smartwallet.utils.TokenManager;
 import com.google.android.material.card.MaterialCardView;
@@ -37,6 +37,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -52,6 +54,8 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
     private MaterialCardView cardSelectedCardInfo;
     private TextView textSelectedCardTitle;
     private TextView textSelectedCardDetails;
+    private TextView textSelectedCardCashbackLabel;
+    private TextView textSelectedCardCategories;
     private CardsAdapter cardsAdapter;
     private CardsApi cardsApi;
     private TokenManager tokenManager;
@@ -88,6 +92,8 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
         cardSelectedCardInfo = view.findViewById(R.id.cardSelectedCardInfo);
         textSelectedCardTitle = view.findViewById(R.id.textSelectedCardTitle);
         textSelectedCardDetails = view.findViewById(R.id.textSelectedCardDetails);
+        textSelectedCardCashbackLabel = view.findViewById(R.id.textSelectedCardCashbackLabel);
+        textSelectedCardCategories = view.findViewById(R.id.textSelectedCardCategories);
         
         // Statistics views
         textTotalCards = view.findViewById(R.id.textTotalCards);
@@ -265,9 +271,12 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
         
         try {
             double limit = Double.parseDouble(limitStr);
-            // Уходит на бэкенд; в списке карт отображаются значения из ответа GET /cards (не подставляются на клиенте).
-            CashbackRules cashbackRules = new CashbackRules(1, 2, 3);
-            CardRequest request = new CardRequest(bankName, cardName, last4, cashbackRules, limit);
+            CardRequest request = new CardRequest(
+                    bankName,
+                    cardName,
+                    last4,
+                    CashbackRulesGenerator.generate(new Random()),
+                    limit);
             
             String authToken = "Bearer " + token;
             cardsApi.createCard(authToken, request).enqueue(new Callback<Card>() {
@@ -331,12 +340,39 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
         String title = !TextUtils.isEmpty(c.cardName) ? c.cardName : (c.bankName != null ? c.bankName : "Карта");
         textSelectedCardTitle.setText(title);
         textSelectedCardDetails.setText("•••• " + (c.last4 != null ? c.last4 : "—"));
+        bindSelectedCardCashbackCategories(c);
+    }
+
+    private void bindSelectedCardCashbackCategories(@NonNull Card c) {
+        if (textSelectedCardCashbackLabel == null || textSelectedCardCategories == null) return;
+        if (c.cashbackRules == null || c.cashbackRules.isEmpty()) {
+            textSelectedCardCashbackLabel.setVisibility(View.GONE);
+            textSelectedCardCategories.setVisibility(View.GONE);
+            textSelectedCardCategories.setText("");
+            return;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, Integer> e : c.cashbackRules.entrySet()) {
+            if (sb.length() > 0) sb.append('\n');
+            sb.append(e.getKey()).append(" — ").append(e.getValue()).append('%');
+        }
+        textSelectedCardCategories.setText(sb.toString());
+        textSelectedCardCashbackLabel.setVisibility(View.VISIBLE);
+        textSelectedCardCategories.setVisibility(View.VISIBLE);
     }
 
     @NonNull
     private String formatCardSummaryMessage(@NonNull Card c) {
         String name = !TextUtils.isEmpty(c.cardName) ? c.cardName : (c.bankName != null ? c.bankName : "Карта");
-        return name + "\n•••• " + (c.last4 != null ? c.last4 : "—");
+        StringBuilder sb = new StringBuilder();
+        sb.append(name).append("\n•••• ").append(c.last4 != null ? c.last4 : "—");
+        if (c.cashbackRules != null && !c.cashbackRules.isEmpty()) {
+            sb.append("\n\nКэшбэк по категориям:");
+            for (Map.Entry<String, Integer> e : c.cashbackRules.entrySet()) {
+                sb.append("\n").append(e.getKey()).append(": ").append(e.getValue()).append("%");
+            }
+        }
+        return sb.toString();
     }
 
     private void showCardDetailsDialog(@NonNull Card card) {
@@ -371,13 +407,7 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
         for (Card card : cards) {
             totalLimit += card.limitMonthly;
             
-            // Calculate average cashback from cashback rules
-            if (card.cashbackRules != null) {
-                double avgCardCashback = (card.cashbackRules.additionalProp1 + 
-                                        card.cashbackRules.additionalProp2 + 
-                                        card.cashbackRules.additionalProp3) / 3.0;
-                totalCashback += avgCardCashback;
-            }
+            totalCashback += CashbackRulesGenerator.averagePercent(card.cashbackRules);
         }
         
         textTotalLimit.setText(String.format("%.0f ₽", totalLimit));

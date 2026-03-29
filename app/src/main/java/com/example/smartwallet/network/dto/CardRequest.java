@@ -2,6 +2,8 @@ package com.example.smartwallet.network.dto;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Map;
+
 public class CardRequest {
     @SerializedName("bank_name")
     public String bankName;
@@ -12,14 +14,14 @@ public class CardRequest {
     public String last4;
     
     @SerializedName("cashback_rules")
-    public CashbackRules cashbackRules;
+    public Map<String, Integer> cashbackRules;
     
     @SerializedName("limit_monthly")
     public double limitMonthly;
     
     public CardRequest() {}
     
-    public CardRequest(String bankName, String cardName, String last4, CashbackRules cashbackRules, double limitMonthly) {
+    public CardRequest(String bankName, String cardName, String last4, Map<String, Integer> cashbackRules, double limitMonthly) {
         this.bankName = bankName;
         this.cardName = cardName;
         this.last4 = last4;
