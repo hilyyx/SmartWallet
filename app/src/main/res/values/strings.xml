@@ -17,6 +17,11 @@
     <string name="demo_confirm_yes">Стереть и загрузить</string>
     <string name="demo_success">Демо загружено: карт %1$d, операций %2$d</string>
     <string name="demo_error_409">У вас уже есть карты. Повторите с параметром reset=true или сначала удалите карты. Детали: %1$s</string>
+    <string name="analytics_trends_intro">Нейросеть анализирует все траты и выдаёт тренды — сравнение категорий и долей за период.</string>
+    <string name="analytics_trends_insight_food">По расчёту: на «еду» вы потратили на %.0f%% %s, чем в предыдущем месяце.</string>
+    <string name="analytics_trends_example">Например: вы потратили на продукты на 10% больше, чем на еду вне дома.</string>
+    <string name="analytics_trends_loading">Запрашиваем актуальный разбор у ассистента…</string>
+
     <string name="profile_avatar_cd">Аватар, нажмите чтобы сменить</string>
     <string name="profile_avatar_upload_ok">Аватар обновлён</string>
     <string name="profile_avatar_no_endpoint">Сервер не принял файл. Нужен POST multipart на auth/profile/avatar (поле file).</string>

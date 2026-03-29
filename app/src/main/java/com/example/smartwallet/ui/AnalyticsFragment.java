@@ -2,6 +2,7 @@ package com.example.smartwallet.ui;
 
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -54,6 +55,8 @@ public class AnalyticsFragment extends Fragment {
 
     private PieChart pieChart;
     private FlexboxLayout legendCategories;
+    private MaterialCardView cardAnalyticsCashback;
+    private MaterialCardView cardAnalyticsTrends;
     private TextView textTotalCashback;
     private TextView textTrends;
     private ProgressBar progress;
@@ -65,6 +68,7 @@ public class AnalyticsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_analytics, container, false);
 
         initViews(view);
+        applyAnalyticsCardGlow();
         setupPieChart();
         setupViewModel();
 
@@ -74,9 +78,26 @@ public class AnalyticsFragment extends Fragment {
     private void initViews(View view) {
         pieChart = view.findViewById(R.id.pieChart);
         legendCategories = view.findViewById(R.id.legendCategories);
+        cardAnalyticsCashback = view.findViewById(R.id.cardAnalyticsCashback);
+        cardAnalyticsTrends = view.findViewById(R.id.cardAnalyticsTrends);
         textTotalCashback = view.findViewById(R.id.textTotalCashback);
         textTrends = view.findViewById(R.id.textTrends);
         progress = view.findViewById(R.id.progress);
+    }
+
+    /** Свечение карточек как на главной (API 28+), без цветной обводки. */
+    private void applyAnalyticsCardGlow() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+            return;
+        }
+        int glow = ContextCompat.getColor(requireContext(), R.color.home_card_glow_shadow);
+        for (MaterialCardView card : new MaterialCardView[]{cardAnalyticsCashback, cardAnalyticsTrends}) {
+            if (card == null) {
+                continue;
+            }
+            card.setOutlineAmbientShadowColor(glow);
+            card.setOutlineSpotShadowColor(glow);
+        }
     }
 
     private void setupPieChart() {
@@ -112,12 +133,21 @@ public class AnalyticsFragment extends Fragment {
     }
 
     private void setupViewModel() {
-        analyticsViewModel = new ViewModelProvider(this).get(AnalyticsViewModel.class);
+        analyticsViewModel = new ViewModelProvider(
+                this,
+                ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().getApplication()))
+                .get(AnalyticsViewModel.class);
         analyticsViewModel.setTokenManager(TokenManager.getInstance(requireContext()));
 
         analyticsViewModel.getAnalyticsData().observe(getViewLifecycleOwner(), analyticsData -> {
             if (analyticsData != null) {
                 updateAnalytics(analyticsData);
+            }
+        });
+
+        analyticsViewModel.getTrendsInsight().observe(getViewLifecycleOwner(), text -> {
+            if (text != null && textTrends != null) {
+                textTrends.setText(text);
             }
         });
 
@@ -135,16 +165,16 @@ public class AnalyticsFragment extends Fragment {
         analyticsViewModel.loadAnalytics();
     }
 
-    private void updateAnalytics(AnalyticsData analyticsData) {
-        textTotalCashback.setText(String.format("%.0f ₽", analyticsData.totalCashback));
-
-        if (analyticsData.spendingTrends != null) {
-            String trendText = String.format("Ты тратишь на еду на %.0f%% %s, чем месяц назад.",
-                    analyticsData.spendingTrends.trendPercentage,
-                    analyticsData.spendingTrends.foodTrend);
-            textTrends.setText(trendText);
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (analyticsViewModel != null) {
+            analyticsViewModel.refreshAiTrends();
         }
+    }
 
+    private void updateAnalytics(AnalyticsData analyticsData) {
+        textTotalCashback.setText(String.format(Locale.getDefault(), "+%.0f ₽", Math.max(0, analyticsData.totalCashback)));
         updatePieChart(analyticsData.categorySpending);
     }
 
