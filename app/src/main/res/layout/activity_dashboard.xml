@@ -21,14 +21,14 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_bottom_nav_bar"
         android:clipChildren="false"
-        android:paddingTop="10dp"
+        android:paddingTop="6dp"
         android:theme="@style/ThemeOverlay.SmartWallet.BottomNav"
         app:backgroundTint="@null"
         app:elevation="6dp"
         app:itemIconTint="@color/nav_bottom_item_tint"
         app:itemRippleColor="@color/nav_item_ripple"
         app:itemTextColor="@color/nav_bottom_item_tint"
-        app:labelVisibilityMode="labeled"
+        app:labelVisibilityMode="unlabeled"
         app:menu="@menu/menu_bottom_nav" />
 
 </LinearLayout>

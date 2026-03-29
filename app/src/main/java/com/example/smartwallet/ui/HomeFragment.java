@@ -16,12 +16,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.smartwallet.R;
 import com.example.smartwallet.network.ApiClient;
-import com.example.smartwallet.network.AssistantApi;
-import com.example.smartwallet.network.CashbackApi;
 import com.example.smartwallet.network.CardsApi;
-import com.example.smartwallet.network.dto.BestCardResponse;
 import com.example.smartwallet.network.dto.Card;
-import com.example.smartwallet.network.dto.Recommendation;
+import com.example.smartwallet.utils.AiFinanceTips;
 import com.example.smartwallet.utils.CashbackRulesGenerator;
 import com.example.smartwallet.utils.ErrorHandler;
 import com.example.smartwallet.utils.TokenManager;
@@ -51,13 +48,10 @@ public class HomeFragment extends Fragment {
     private MaterialButton buttonPay;
     private CircularProgressIndicator progress;
 
-    private CashbackApi cashbackApi;
     private CardsApi cardsApi;
-    private AssistantApi assistantApi;
     private TokenManager tokenManager;
 
     private Card activeCard;
-    private BestCardResponse bestCard;
 
     @Nullable
     @Override
@@ -68,14 +62,11 @@ public class HomeFragment extends Fragment {
         applyHomeCardGlowShadow();
         setupClickListeners();
         
-        cashbackApi = ApiClient.getCashbackApi();
         cardsApi = ApiClient.getCardsApi();
-        assistantApi = ApiClient.getAssistantApi();
         tokenManager = TokenManager.getInstance(requireContext());
         
         loadActiveCard();
-        loadRecommendations();
-        
+
         return view;
     }
     
@@ -116,7 +107,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void setupClickListeners() {
-        buttonSmartChoice.setOnClickListener(v -> getBestCard());
+        buttonSmartChoice.setOnClickListener(v -> applyRandomAiTip());
         buttonPay.setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), PayQrScanActivity.class)));
     }
@@ -151,33 +142,10 @@ public class HomeFragment extends Fragment {
         });
     }
     
-    private void loadRecommendations() {
-        String token = tokenManager.getToken();
-        if (token == null) {
-            return;
-        }
-        
-        String authToken = "Bearer " + token;
-        
-        assistantApi.getRecommendations(authToken).enqueue(new Callback<List<Recommendation>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<Recommendation>> call, @NonNull Response<List<Recommendation>> response) {
-                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
-                    // Take the first recommendation
-                    Recommendation recommendation = response.body().get(0);
-                    textRecommendation.setText(recommendation.message);
-                } else {
-                    // Fallback to default message
-                    textRecommendation.setText("Рекомендую оплатить картой Тинькофф Black — 5% кэшбэк");
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<Recommendation>> call, @NonNull Throwable t) {
-                // Fallback to default message on error
-                textRecommendation.setText("Рекомендую оплатить картой Тинькофф Black — 5% кэшбэк");
-            }
-        });
+    /** Новый короткий совет — только по нажатию «Финансовый совет». */
+    private void applyRandomAiTip() {
+        if (textRecommendation == null) return;
+        textRecommendation.setText(AiFinanceTips.pickRandom(requireContext()));
     }
     
     private void updateActiveCardDisplay() {
@@ -204,43 +172,6 @@ public class HomeFragment extends Fragment {
             textActiveCardCashback.setText(String.format("%.0f%% кэшбэк", avgCashback));
         } else {
             textActiveCardCashback.setText("—");
-        }
-    }
-    
-    private void getBestCard() {
-        String token = tokenManager.getToken();
-        if (token == null) {
-            Toast.makeText(requireContext(), "Токен не найден. Войдите в систему.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        
-        setLoading(true);
-        String authToken = "Bearer " + token;
-        
-        cashbackApi.getBestCard(authToken, "еда").enqueue(new Callback<BestCardResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<BestCardResponse> call, @NonNull Response<BestCardResponse> response) {
-                setLoading(false);
-                if (response.isSuccessful() && response.body() != null) {
-                    bestCard = response.body();
-                    updateRecommendation();
-                } else {
-                    Toast.makeText(requireContext(), "Ошибка получения рекомендации", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<BestCardResponse> call, @NonNull Throwable t) {
-                setLoading(false);
-                ErrorHandler.showError(requireContext(), t);
-            }
-        });
-    }
-    
-    private void updateRecommendation() {
-        if (bestCard != null) {
-            textRecommendation.setText(String.format("Рекомендую оплатить картой %s %s — %d%% кэшбэк", 
-                    bestCard.bankName, bestCard.cardName, bestCard.cashbackPercentage));
         }
     }
     

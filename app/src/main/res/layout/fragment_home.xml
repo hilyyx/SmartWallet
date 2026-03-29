@@ -130,8 +130,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="@dimen/home_advice_block_min_height"
+                android:gravity="center_vertical"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="@dimen/home_advice_block_padding_vertical">
 
                 <TextView
                     android:id="@+id/textRecommendedCategory"
@@ -157,17 +160,20 @@
             app:cardUseCompatPadding="true">
 
             <LinearLayout
-                android:layout_width="340dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="@dimen/home_advice_block_min_height"
+                android:gravity="center_vertical"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="@dimen/home_advice_block_padding_vertical">
 
                 <TextView
                     android:id="@+id/textRecommendation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:text="Рекомендую оплатить картой Тинькофф Black — 5% кэшбэк"
+                    android:gravity="start|center_vertical"
+                    android:text="@string/home_finance_tip_prompt"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -180,7 +186,7 @@
             style="@style/Widget.SmartWallet.Button.FullWidth"
             android:layout_marginBottom="@dimen/home_block_spacing"
             android:stateListAnimator="@null"
-            android:text="Умный выбор карты"
+            android:text="Финансовый совет"
             android:textSize="16sp"
             app:elevation="@dimen/home_advice_cards_elevation"
             app:icon="@drawable/ic_ai_24"

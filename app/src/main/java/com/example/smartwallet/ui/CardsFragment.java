@@ -3,7 +3,9 @@ package com.example.smartwallet.ui;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.content.res.Resources;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -52,6 +55,7 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
     private ProgressBar progress;
     private FloatingActionButton fabAddCard;
     private MaterialCardView cardSelectedCardInfo;
+    private MaterialCardView cardCardsStatistics;
     private TextView textSelectedCardTitle;
     private TextView textSelectedCardDetails;
     private TextView textSelectedCardCashbackLabel;
@@ -72,6 +76,7 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
         View view = inflater.inflate(R.layout.fragment_cards, container, false);
         
         initViews(view);
+        applyCardsScreenGlow();
         setupRecyclerView();
         setupClickListeners();
         
@@ -90,6 +95,7 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
         progress = view.findViewById(R.id.progress);
         fabAddCard = view.findViewById(R.id.fabAddCard);
         cardSelectedCardInfo = view.findViewById(R.id.cardSelectedCardInfo);
+        cardCardsStatistics = view.findViewById(R.id.cardCardsStatistics);
         textSelectedCardTitle = view.findViewById(R.id.textSelectedCardTitle);
         textSelectedCardDetails = view.findViewById(R.id.textSelectedCardDetails);
         textSelectedCardCashbackLabel = view.findViewById(R.id.textSelectedCardCashbackLabel);
@@ -105,6 +111,41 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
         // Setup error state retry button
         setupErrorState();
     }
+
+    /**
+     * Центрирует карточку 288dp + отступы и оставляет по краям «зазор», чтобы соседняя карта
+     * слегка выглядывала (clipToPadding=false).
+     */
+    private void applyCarouselHorizontalPadding() {
+        if (recyclerCards == null) {
+            return;
+        }
+        int w = recyclerCards.getWidth();
+        if (w <= 0) {
+            return;
+        }
+        Resources res = getResources();
+        float d = res.getDisplayMetrics().density;
+        int cardTotalPx = Math.round((288f + 8f + 8f) * d);
+        int pad = Math.max(0, (w - cardTotalPx) / 2);
+        int vertical = Math.round(8f * d);
+        recyclerCards.setPadding(pad, vertical, pad, vertical);
+    }
+
+    private void applyCardsScreenGlow() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+            return;
+        }
+        int glow = ContextCompat.getColor(requireContext(), R.color.home_card_glow_shadow);
+        if (cardSelectedCardInfo != null) {
+            cardSelectedCardInfo.setOutlineAmbientShadowColor(glow);
+            cardSelectedCardInfo.setOutlineSpotShadowColor(glow);
+        }
+        if (cardCardsStatistics != null) {
+            cardCardsStatistics.setOutlineAmbientShadowColor(glow);
+            cardCardsStatistics.setOutlineSpotShadowColor(glow);
+        }
+    }
     
     private void setupRecyclerView() {
         cardsAdapter = new CardsAdapter();
@@ -114,6 +155,13 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
                 LinearLayoutManager.HORIZONTAL, false);
         recyclerCards.setLayoutManager(layoutManager);
         recyclerCards.setAdapter(cardsAdapter);
+
+        recyclerCards.addOnLayoutChangeListener((v, l, t, r, b, ol, ot, or, ob) -> {
+            if (r - l != or - ol) {
+                applyCarouselHorizontalPadding();
+            }
+        });
+        recyclerCards.post(this::applyCarouselHorizontalPadding);
         
         snapHelper.attachToRecyclerView(recyclerCards);
         recyclerCards.addOnScrollListener(new RecyclerView.OnScrollListener() {

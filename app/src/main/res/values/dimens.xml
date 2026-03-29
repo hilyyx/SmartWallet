@@ -15,11 +15,21 @@
     <dimen name="home_card_glow_elevation">12dp</dimen>
     <!-- Тень у блоков советов (категория + текст рекомендации) -->
     <dimen name="home_advice_cards_elevation">6dp</dimen>
+    <!-- Главная: «Рекомендованная категория» и блок совета — чуть выше кнопок (кнопки = smartwallet_button_height 65dp) -->
+    <dimen name="home_advice_block_min_height">76dp</dimen>
+    <dimen name="home_advice_block_padding_vertical">22dp</dimen>
     <!-- Сдвиг контента вниз на основных экранах (не вход/регистрация) -->
     <dimen name="screen_content_extra_top">16dp</dimen>
     <!-- Единые отступы шапки как на экране «Мои карты» -->
     <dimen name="screen_content_padding_top">48dp</dimen>
+    <!-- Горизонтальная колонка контента: главная (fragment_home), карты (fragment_cards) — как у FullWidth-кнопок -->
     <dimen name="screen_content_padding_horizontal">32dp</dimen>
+    <!-- Карты: зазор под нижним блоком, чтобы FAB не перекрывал статистику (≈ высота FAB + отступ) -->
+    <dimen name="cards_screen_bottom_above_fab">76dp</dimen>
+    <!-- Карты: насколько «Статистика карт» шире остальной колонки — отрицательный margin Start/End у cardCardsStatistics.
+         Чем больше по модулю (например -24dp, -32dp), тем шире блок. 0dp = как «Выбранная карта».
+         При screen_content_padding_horizontal=32dp значение -32dp выводит карточку почти к краям экрана. -->
+    <dimen name="cards_statistics_horizontal_outset">-10dp</dimen>
     <dimen name="screen_header_margin_bottom">12dp</dimen>
     <dimen name="screen_title_subtitle_spacing">2dp</dimen>
     <!-- Вход / регистрация: чуть шире поля — меньше отступы от края экрана -->
