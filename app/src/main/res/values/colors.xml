@@ -23,6 +23,9 @@
     <!-- Главная: свечение #696969 @ 15% (макет #69696926 RRGGBBAA → AARRGGBB #26696969); blur в Android — через elevation + outline -->
     <!-- Чуть сильнее, чем ~15%, чтобы свечение читалось на белом фоне -->
     <color name="home_card_glow_shadow">#686c5e</color>
+    <!-- Профиль: очень мягкая тень белых кнопок -->
+    <color name="profile_button_glow_ambient">#E6E8E4</color>
+    <color name="profile_button_glow_spot">#DCDED9</color>
 
     <!-- Диалог добавления карты -->
     <color name="add_card_field_fill">#F4F5F7</color>

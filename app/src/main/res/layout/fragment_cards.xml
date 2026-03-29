@@ -24,18 +24,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/screen_header_margin_bottom"
+            android:gravity="center_horizontal"
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
                 android:text="Мои карты"
                 android:textAppearance="@style/SmartWalletScreenTitle" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/screen_title_subtitle_spacing"
+                android:gravity="center_horizontal"
                 android:text="Управляйте своими банковскими картами"
                 android:textAppearance="@style/SmartWalletScreenSubtitle" />
         </LinearLayout>

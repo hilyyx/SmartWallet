@@ -33,6 +33,13 @@
     <!-- История операций: чуть шире список относительно остальных экранов -->
     <dimen name="history_screen_padding_horizontal">22dp</dimen>
     <dimen name="screen_header_margin_bottom">12dp</dimen>
+    <!-- Профиль: зазор между email в шапке и аватаром -->
+    <dimen name="profile_avatar_top_spacing">24dp</dimen>
+    <dimen name="profile_avatar_size">120dp</dimen>
+    <!-- Профиль: едва заметная тень у белых кнопок -->
+    <dimen name="profile_white_button_elevation">3dp</dimen>
+    <!-- Зазор между именем и первой кнопкой (без растягивающегося Spacer) -->
+    <dimen name="profile_actions_top_spacing">18dp</dimen>
     <dimen name="screen_title_subtitle_spacing">2dp</dimen>
     <!-- Вход / регистрация: чуть шире поля — меньше отступы от края экрана -->
     <dimen name="auth_form_screen_padding_horizontal">16dp</dimen>

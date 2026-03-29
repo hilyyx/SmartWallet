@@ -5,6 +5,7 @@ import android.text.TextWatcher;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * Маска телефона: X-XXX-XXX-XX-XX (11 цифр, первая 7 или 8).
@@ -82,6 +83,22 @@ public final class PhoneMaskHelper {
     public static String digitsOnly(String masked) {
         if (masked == null) return "";
         return masked.replaceAll("\\D", "");
+    }
+
+    /**
+     * Отображение номера в профиле и т.п.: только цифры → маска X-XXX-XXX-XX-XX (до 11 цифр).
+     */
+    @NonNull
+    public static String formatForDisplay(@Nullable String phone) {
+        if (phone == null) return "";
+        String d = digitsOnly(phone);
+        if (d.isEmpty()) {
+            return phone.trim();
+        }
+        if (d.length() > MAX_DIGITS) {
+            d = d.substring(0, MAX_DIGITS);
+        }
+        return formatDigits(d);
     }
 
     public static boolean isCompleteValid(@NonNull String masked) {

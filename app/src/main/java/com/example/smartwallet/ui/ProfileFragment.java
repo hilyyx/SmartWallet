@@ -3,12 +3,12 @@ package com.example.smartwallet.ui;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,22 +17,18 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.signature.ObjectKey;
 import com.example.smartwallet.BuildConfig;
 import com.example.smartwallet.R;
 import com.example.smartwallet.network.ApiClient;
 import com.example.smartwallet.network.AuthApi;
-import com.example.smartwallet.network.CardsApi;
-import com.example.smartwallet.network.DemoApi;
-import com.example.smartwallet.network.dto.Card;
-import com.example.smartwallet.network.dto.CardCashbackPatchRequest;
-import com.example.smartwallet.network.dto.DemoSeedResponse;
 import com.example.smartwallet.network.dto.ProfileResponse;
-import com.example.smartwallet.utils.CashbackRulesGenerator;
+import com.example.smartwallet.utils.PhoneMaskHelper;
 import com.example.smartwallet.utils.TokenManager;
 import com.google.android.material.button.MaterialButton;
 
@@ -41,9 +37,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -61,8 +54,10 @@ public class ProfileFragment extends Fragment {
     private TextView textEmail;
     private ProgressBar progress;
     private MaterialButton buttonAiChat;
-    private View buttonDemoSeed;
     private MaterialButton buttonLogout;
+
+    /** Меняется после успешной загрузки аватара — иначе Glide не перечитывает тот же URL. */
+    private long avatarGlideSignature = 0L;
 
     private final ActivityResultLauncher<String> pickAvatarLauncher =
             registerForActivityResult(new ActivityResultContracts.GetContent(), this::onAvatarUriPicked);
@@ -79,14 +74,11 @@ public class ProfileFragment extends Fragment {
         textEmail = view.findViewById(R.id.textEmail);
         progress = view.findViewById(R.id.progress);
         buttonAiChat = view.findViewById(R.id.buttonAiChat);
-        buttonDemoSeed = view.findViewById(R.id.buttonDemoSeed);
         buttonLogout = view.findViewById(R.id.buttonLogout);
 
         buttonAiChat.setOnClickListener(v -> openAssistant());
-        if (buttonDemoSeed != null) {
-            buttonDemoSeed.setOnClickListener(v -> confirmAndRunDemoSeed());
-        }
         buttonLogout.setOnClickListener(v -> logout());
+        buttonAiChat.post(this::applyProfileButtonGlow);
         if (avatarButton != null) {
             avatarButton.setOnClickListener(v -> pickAvatarLauncher.launch("image/*"));
         }
@@ -102,133 +94,22 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    private void confirmAndRunDemoSeed() {
-        new AlertDialog.Builder(requireContext())
-                .setTitle(R.string.demo_confirm_title)
-                .setMessage(R.string.demo_confirm_message)
-                .setNegativeButton(android.R.string.cancel, null)
-                .setPositiveButton(R.string.demo_confirm_yes, (d, w) -> runDemoSeed(true))
-                .show();
-    }
-
-    private void runDemoSeed(boolean reset) {
-        TokenManager tokenManager = TokenManager.getInstance(requireContext());
-        String token = tokenManager.getToken();
-        if (token == null) {
-            Toast.makeText(requireContext(), "Токен не найден. Войдите в систему.", Toast.LENGTH_SHORT).show();
+    /** Лёгкая тень у белых кнопок (API 28+ — цвет контура тени). */
+    private void applyProfileButtonGlow() {
+        float elev = getResources().getDimension(R.dimen.profile_white_button_elevation);
+        buttonAiChat.setElevation(elev);
+        buttonLogout.setElevation(elev);
+        buttonAiChat.setTranslationZ(0f);
+        buttonLogout.setTranslationZ(0f);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             return;
         }
-
-        setLoading(true);
-        if (buttonDemoSeed != null) buttonDemoSeed.setEnabled(false);
-
-        DemoApi demoApi = ApiClient.getDemoApi();
-        String authToken = "Bearer " + token;
-        demoApi.seed(authToken, reset).enqueue(new Callback<DemoSeedResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<DemoSeedResponse> call, @NonNull Response<DemoSeedResponse> response) {
-                setLoading(false);
-                if (buttonDemoSeed != null) buttonDemoSeed.setEnabled(true);
-
-                if (response.isSuccessful() && response.body() != null) {
-                    DemoSeedResponse body = response.body();
-                    Toast.makeText(
-                            requireContext(),
-                            getString(R.string.demo_success, body.cardsCreated, body.transactionsCreated),
-                            Toast.LENGTH_LONG
-                    ).show();
-                    randomizeCashbackOnAllCardsThenNotify(authToken);
-                    return;
-                }
-
-                if (response.code() == 409) {
-                    String detail = readErrorBody(response);
-                    if (detail == null || detail.isEmpty()) {
-                        detail = getString(R.string.demo_presentation_hint);
-                    }
-                    Toast.makeText(
-                            requireContext(),
-                            getString(R.string.demo_error_409, detail),
-                            Toast.LENGTH_LONG
-                    ).show();
-                    return;
-                }
-
-                if (response.code() == 401) {
-                    Toast.makeText(requireContext(), "Сессия истекла. Войдите в систему.", Toast.LENGTH_SHORT).show();
-                    tokenManager.clearToken();
-                    logout();
-                    return;
-                }
-
-                Toast.makeText(requireContext(), "Ошибка демо: код " + response.code(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<DemoSeedResponse> call, @NonNull Throwable t) {
-                setLoading(false);
-                if (buttonDemoSeed != null) buttonDemoSeed.setEnabled(true);
-                Toast.makeText(requireContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    /** После демо: случайные категории на каждую карту (PATCH), затем обновление вкладок. */
-    private void randomizeCashbackOnAllCardsThenNotify(@NonNull String authToken) {
-        CardsApi cardsApi = ApiClient.getCardsApi();
-        cardsApi.getCards(authToken).enqueue(new Callback<List<Card>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<Card>> call, @NonNull Response<List<Card>> response) {
-                if (!response.isSuccessful() || response.body() == null || response.body().isEmpty()) {
-                    notifyDashboardDemoSeeded();
-                    return;
-                }
-                List<Card> list = response.body();
-                AtomicInteger pending = new AtomicInteger(list.size());
-                Random rnd = new Random();
-                Runnable done = () -> {
-                    if (pending.decrementAndGet() == 0) {
-                        notifyDashboardDemoSeeded();
-                    }
-                };
-                for (Card card : list) {
-                    CardCashbackPatchRequest patch = new CardCashbackPatchRequest();
-                    patch.cashbackRules = CashbackRulesGenerator.generate(rnd);
-                    cardsApi.patchCardCashback(authToken, card.id, patch).enqueue(new Callback<Card>() {
-                        @Override
-                        public void onResponse(@NonNull Call<Card> c, @NonNull Response<Card> r) {
-                            done.run();
-                        }
-
-                        @Override
-                        public void onFailure(@NonNull Call<Card> c, @NonNull Throwable t) {
-                            done.run();
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<Card>> call, @NonNull Throwable t) {
-                notifyDashboardDemoSeeded();
-            }
-        });
-    }
-
-    private void notifyDashboardDemoSeeded() {
-        if (getActivity() instanceof DashboardActivity) {
-            ((DashboardActivity) getActivity()).notifyDemoSeeded();
-        }
-    }
-
-    @Nullable
-    private static String readErrorBody(@NonNull Response<?> response) {
-        if (response.errorBody() == null) return null;
-        try {
-            return response.errorBody().string();
-        } catch (IOException e) {
-            return null;
-        }
+        int ambient = ContextCompat.getColor(requireContext(), R.color.profile_button_glow_ambient);
+        int spot = ContextCompat.getColor(requireContext(), R.color.profile_button_glow_spot);
+        buttonAiChat.setOutlineAmbientShadowColor(ambient);
+        buttonAiChat.setOutlineSpotShadowColor(spot);
+        buttonLogout.setOutlineAmbientShadowColor(ambient);
+        buttonLogout.setOutlineSpotShadowColor(spot);
     }
 
     private void loadProfile() {
@@ -268,9 +149,28 @@ public class ProfileFragment extends Fragment {
 
     private void bindProfile(@NonNull ProfileResponse profile) {
         textName.setText(profile.name);
-        textPhone.setText(profile.phone);
-        textEmail.setText(profile.email);
+        textEmail.setText(profile.email != null ? profile.email : "");
+        bindPhoneDisplay(profile.phone);
         bindAvatar(profile.avatarUrl);
+    }
+
+    private void bindPhoneDisplay(@Nullable String rawPhone) {
+        if (rawPhone == null || rawPhone.trim().isEmpty()) {
+            textPhone.setText("—");
+            textPhone.setTextColor(ContextCompat.getColor(requireContext(), R.color.md_theme_onSurfaceVariant));
+            return;
+        }
+        String masked = PhoneMaskHelper.formatForDisplay(rawPhone);
+        String digits = PhoneMaskHelper.digitsOnly(masked);
+        if (digits.isEmpty()) {
+            textPhone.setText(rawPhone.trim());
+            textPhone.setTextColor(ContextCompat.getColor(requireContext(), R.color.md_theme_onSurfaceVariant));
+            return;
+        }
+        textPhone.setText(masked);
+        int gray = ContextCompat.getColor(requireContext(), R.color.md_theme_onSurfaceVariant);
+        int error = ContextCompat.getColor(requireContext(), R.color.md_theme_error);
+        textPhone.setTextColor(PhoneMaskHelper.isCompleteValid(masked) ? gray : error);
     }
 
     private void bindAvatar(@Nullable String avatarUrl) {
@@ -286,6 +186,8 @@ public class ProfileFragment extends Fragment {
         Glide.with(this)
                 .load(url)
                 .circleCrop()
+                .signature(new ObjectKey(avatarGlideSignature + "|" + url))
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.ic_person_24)
                 .into(imageAvatar);
     }
@@ -331,6 +233,7 @@ public class ProfileFragment extends Fragment {
             public void onResponse(@NonNull Call<ProfileResponse> call, @NonNull Response<ProfileResponse> response) {
                 setLoading(false);
                 if (response.isSuccessful() && response.body() != null) {
+                    avatarGlideSignature = System.nanoTime();
                     bindProfile(response.body());
                     Toast.makeText(requireContext(), R.string.profile_avatar_upload_ok, Toast.LENGTH_SHORT).show();
                 } else if (response.code() == 401) {

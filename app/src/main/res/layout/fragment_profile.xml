@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/brand_background">
+    android:background="@color/brand_background"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,217 +14,97 @@
         android:paddingStart="@dimen/screen_content_padding_horizontal"
         android:paddingEnd="@dimen/screen_content_padding_horizontal"
         android:paddingBottom="@dimen/screen_content_padding_horizontal"
-        android:paddingTop="@dimen/screen_content_padding_top">
+        android:paddingTop="@dimen/screen_content_padding_top"
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="@dimen/screen_header_margin_bottom">
+            android:layout_marginBottom="@dimen/screen_header_margin_bottom"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
                 android:text="Профиль"
                 android:textAppearance="@style/SmartWalletScreenTitle" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/textEmail"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/screen_title_subtitle_spacing"
-                android:text="Данные аккаунта и быстрые действия"
+                android:gravity="center_horizontal"
+                android:text="Загрузка..."
                 android:textAppearance="@style/SmartWalletScreenSubtitle" />
         </LinearLayout>
 
-        <com.google.android.material.card.MaterialCardView
+        <FrameLayout
+            android:id="@+id/avatarButton"
+            android:layout_width="@dimen/profile_avatar_size"
+            android:layout_height="@dimen/profile_avatar_size"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/profile_avatar_top_spacing"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless">
+
+            <ImageView
+                android:id="@+id/imageAvatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/profile_avatar_cd"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_person_24" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/textPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="4dp"
-            app:cardUseCompatPadding="true"
-            android:backgroundTint="@color/brand_card_bg">
+            android:layout_marginTop="8dp"
+            android:gravity="center_horizontal"
+            android:text="Загрузка..."
+            android:textColor="@color/md_theme_onSurfaceVariant"
+            android:textSize="17sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="20dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="16dp">
-
-                    <FrameLayout
-                        android:id="@+id/avatarButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?attr/selectableItemBackgroundBorderless">
-
-                        <com.google.android.material.card.MaterialCardView
-                            android:layout_width="56dp"
-                            android:layout_height="56dp"
-                            app:cardCornerRadius="28dp"
-                            app:cardElevation="2dp"
-                            android:backgroundTint="@color/md_theme_primaryContainer">
-
-                            <ImageView
-                                android:id="@+id/imageAvatar"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:contentDescription="@string/profile_avatar_cd"
-                                android:scaleType="centerCrop"
-                                android:src="@drawable/ic_person_24" />
-                        </com.google.android.material.card.MaterialCardView>
-                    </FrameLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="12dp">
-
-                        <TextView
-                            android:id="@+id/textName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Загрузка..."
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/brand_text_primary" />
-
-                        <TextView
-                            android:id="@+id/textPhone"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Загрузка..."
-                            android:textSize="14sp"
-                            android:textColor="@color/md_theme_onSurfaceVariant"
-                            android:layout_marginTop="4dp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/md_outline_variant"
-                    android:layout_marginBottom="12dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:paddingVertical="8dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_email_24"
-                        android:tint="@color/md_theme_primary"
-                        android:layout_marginEnd="12dp" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Email"
-                            android:textSize="12sp"
-                            android:textColor="@color/md_theme_onSurfaceVariant" />
-
-                        <TextView
-                            android:id="@+id/textEmail"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Загрузка..."
-                            android:textSize="15sp"
-                            android:textColor="@color/brand_text_primary"
-                            android:layout_marginTop="2dp" />
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
+        <TextView
+            android:id="@+id/textName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
-            app:cardUseCompatPadding="true"
-            android:backgroundTint="@color/md_theme_surfaceContainerLow">
+            android:layout_marginTop="8dp"
+            android:gravity="center_horizontal"
+            android:text="Загрузка..."
+            android:textColor="@color/brand_text_primary"
+            android:textSize="24sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:text="Быстрые действия"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/brand_text_primary"
-                    android:layout_marginBottom="12dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/buttonAiChat"
-                    style="@style/Widget.SmartWallet.Button"
-                    android:text="Чат с AI SmartWallet"
-                    android:textSize="15sp"
-                    app:icon="@drawable/ic_ai_24"
-                    app:iconPadding="8dp"
-                    app:iconGravity="textStart"
-                    android:layout_marginBottom="12dp" />
-
-                <TextView
-                    android:id="@+id/textDemoDisclaimer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/demo_presentation_hint"
-                    android:textSize="11sp"
-                    android:textColor="@color/md_theme_onSurfaceVariant"
-                    android:layout_marginBottom="8dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/buttonDemoSeed"
-                    style="@style/Widget.SmartWallet.Button.Outlined"
-                    android:text="@string/demo_presentation_title"
-                    android:textSize="14sp" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonAiChat"
+            style="@style/Widget.SmartWallet.Button.FullWidth.White"
+            android:layout_marginTop="@dimen/profile_actions_top_spacing"
+            android:layout_marginBottom="@dimen/home_block_spacing"
+            android:stateListAnimator="@null"
+            android:text="Чат с AI SmartWallet"
+            android:textSize="16sp"
+            app:elevation="@dimen/profile_white_button_elevation"
+            app:icon="@drawable/ic_ai_24"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonLogout"
-            style="@style/Widget.SmartWallet.Button"
-            android:text="Выйти из профиля"
-            android:textSize="15sp"
-            android:textColor="@color/md_theme_error"
+            style="@style/Widget.SmartWallet.Button.FullWidth.White"
+            android:layout_marginBottom="12dp"
+            android:stateListAnimator="@null"
+            android:text="Выйти из аккаунта"
+            android:textSize="16sp"
+            app:elevation="@dimen/profile_white_button_elevation"
             app:icon="@drawable/ic_logout_24"
             app:iconGravity="textStart"
-            app:iconPadding="8dp"
-            app:iconTint="@color/md_theme_error"
-            android:layout_marginBottom="12dp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            app:iconPadding="8dp" />
     </LinearLayout>
 
     <ProgressBar
