@@ -9,20 +9,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
-        android:paddingBottom="32dp"
-        android:paddingTop="48dp">
+        android:paddingStart="@dimen/screen_content_padding_horizontal"
+        android:paddingEnd="@dimen/screen_content_padding_horizontal"
+        android:paddingBottom="@dimen/screen_content_padding_horizontal"
+        android:paddingTop="@dimen/screen_content_padding_top">
 
-        <!-- Заголовок -->
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Аналитика"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/brand_text_primary"
-            android:layout_marginBottom="24dp" />
+            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/screen_header_margin_bottom">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Аналитика"
+                android:textAppearance="@style/SmartWalletScreenTitle" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/screen_title_subtitle_spacing"
+                android:text="Статистика трат и кэшбэка"
+                android:textAppearance="@style/SmartWalletScreenSubtitle" />
+        </LinearLayout>
 
         <!-- Карточка с круговой диаграммой -->
         <com.google.android.material.card.MaterialCardView

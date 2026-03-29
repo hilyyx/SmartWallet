@@ -18,15 +18,19 @@
     <color name="brand_button_ripple">#40000000</color>
 
     <!-- Лёгкая серая обводка: белая карточка формы, вкладки, серые поля (одинаковый тон) -->
-    <color name="auth_card_stroke">#E8E8EA</color>
+    <color name="auth_card_stroke">#F2F2F2</color>
+
+    <!-- Главная: свечение #696969 @ 15% (макет #69696926 RRGGBBAA → AARRGGBB #26696969); blur в Android — через elevation + outline -->
+    <color name="home_card_glow_shadow">#26696969</color>
 
     <!-- Диалог добавления карты -->
     <color name="add_card_field_fill">#F4F5F7</color>
     <color name="add_card_edit_gray">#6D7179</color>
     <color name="add_card_hint_gray">#9EA2AD</color>
 
-    <!-- Bottom navigation — лаймово-светлый блок -->
+    <!-- Bottom navigation — лаймово-светлый блок (legacy; панель в дашборде теперь белая) -->
     <color name="nav_bar_background">#EEF6D4</color>
+
     <color name="nav_item_selected">#5A7F14</color>
     <color name="nav_item_unselected">#7A8570</color>
     <color name="nav_item_indicator">#D8EF9A</color>

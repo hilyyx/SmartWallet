@@ -4,21 +4,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingStart="32dp"
-    android:paddingEnd="32dp"
-    android:paddingBottom="32dp"
-    android:paddingTop="48dp"
+    android:paddingStart="@dimen/screen_content_padding_horizontal"
+    android:paddingEnd="@dimen/screen_content_padding_horizontal"
+    android:paddingBottom="@dimen/screen_content_padding_horizontal"
+    android:paddingTop="@dimen/screen_content_padding_top"
     android:background="@color/brand_background">
 
-    <!-- Заголовок -->
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="История операций"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/brand_text_primary"
-        android:layout_marginBottom="24dp" />
+        android:orientation="vertical"
+        android:layout_marginBottom="@dimen/screen_header_margin_bottom">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="История операций"
+            android:textAppearance="@style/SmartWalletScreenTitle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/screen_title_subtitle_spacing"
+            android:text="Все операции по вашим картам"
+            android:textAppearance="@style/SmartWalletScreenSubtitle" />
+    </LinearLayout>
 
     <!-- SwipeRefreshLayout -->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

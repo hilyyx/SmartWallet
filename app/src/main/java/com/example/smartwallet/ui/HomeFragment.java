@@ -1,16 +1,16 @@
 package com.example.smartwallet.ui;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.smartwallet.R;
@@ -26,7 +26,9 @@ import com.example.smartwallet.network.dto.TransactionRequest;
 import com.example.smartwallet.utils.CashbackRulesGenerator;
 import com.example.smartwallet.utils.ErrorHandler;
 import com.example.smartwallet.utils.TokenManager;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 import java.util.List;
 
@@ -37,6 +39,10 @@ import retrofit2.Response;
 public class HomeFragment extends Fragment {
 
     private MaterialCardView cardActiveCard;
+    private MaterialCardView cardRecommendedCategory;
+    private MaterialCardView cardRecommendationBottom;
+    private MaterialCardView cardButtonSmartChoice;
+    private MaterialCardView cardButtonPay;
     private TextView textActiveCardSectionTitle;
     private TextView textActiveCardNumber;
     private TextView textActiveCardName;
@@ -44,9 +50,9 @@ public class HomeFragment extends Fragment {
     private TextView textActiveCardCashback;
     private TextView textRecommendedCategory;
     private TextView textRecommendation;
-    private Button buttonSmartChoice;
-    private Button buttonPay;
-    private ProgressBar progress;
+    private MaterialButton buttonSmartChoice;
+    private MaterialButton buttonPay;
+    private CircularProgressIndicator progress;
 
     private CashbackApi cashbackApi;
     private CardsApi cardsApi;
@@ -63,6 +69,7 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         
         initViews(view);
+        applyHomeCardGlowShadow();
         setupClickListeners();
         
         cashbackApi = ApiClient.getCashbackApi();
@@ -79,6 +86,10 @@ public class HomeFragment extends Fragment {
     
     private void initViews(View view) {
         cardActiveCard = view.findViewById(R.id.cardActiveCard);
+        cardRecommendedCategory = view.findViewById(R.id.cardRecommendedCategory);
+        cardRecommendationBottom = view.findViewById(R.id.cardRecommendationBottom);
+        cardButtonSmartChoice = view.findViewById(R.id.cardButtonSmartChoice);
+        cardButtonPay = view.findViewById(R.id.cardButtonPay);
         textActiveCardSectionTitle = view.findViewById(R.id.textActiveCardSectionTitle);
         textActiveCardNumber = view.findViewById(R.id.textActiveCardNumber);
         textActiveCardName = view.findViewById(R.id.textActiveCardName);
@@ -90,7 +101,30 @@ public class HomeFragment extends Fragment {
         buttonPay = view.findViewById(R.id.buttonPay);
         progress = view.findViewById(R.id.progress);
     }
-    
+
+    /**
+     * Свечение #696969 @ 15% без обводки. Blur из макета (~34) на View не переносится —
+     * задаём размах через {@link R.dimen#home_card_glow_elevation} и цвет контура тени (API 28+).
+     */
+    private void applyHomeCardGlowShadow() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+            return;
+        }
+        int glow = ContextCompat.getColor(requireContext(), R.color.home_card_glow_shadow);
+        MaterialCardView[] cards = {
+                cardActiveCard,
+                cardRecommendedCategory,
+                cardRecommendationBottom,
+                cardButtonSmartChoice,
+                cardButtonPay
+        };
+        for (MaterialCardView card : cards) {
+            if (card == null) continue;
+            card.setOutlineAmbientShadowColor(glow);
+            card.setOutlineSpotShadowColor(glow);
+        }
+    }
+
     private void setupClickListeners() {
         buttonSmartChoice.setOnClickListener(v -> getBestCard());
         buttonPay.setOnClickListener(v -> createTransaction());

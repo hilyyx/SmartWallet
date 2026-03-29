@@ -1,29 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/brand_background">
+    android:background="@color/brand_background"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
-        android:paddingBottom="32dp"
-        android:paddingTop="48dp">
+        android:paddingStart="@dimen/screen_content_padding_horizontal"
+        android:paddingEnd="@dimen/screen_content_padding_horizontal"
+        android:paddingTop="@dimen/screen_content_padding_top"
+        android:paddingBottom="@dimen/screen_content_padding_horizontal"
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
-        <!-- Active Card -->
+        <!-- Шапка -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/home_block_spacing">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Главный экран"
+                android:textAppearance="@style/SmartWalletScreenTitle" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/screen_title_subtitle_spacing"
+                android:text="Активная карта и подсказки для оплаты"
+                android:textAppearance="@style/SmartWalletScreenSubtitle" />
+        </LinearLayout>
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardActiveCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/home_block_spacing"
             app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="4dp"
-            app:cardUseCompatPadding="true"
-            android:layout_marginBottom="32dp">
+            app:cardCornerRadius="@dimen/home_bank_card_corner"
+            app:cardElevation="@dimen/home_card_glow_elevation"
+            app:strokeWidth="0dp"
+            app:cardUseCompatPadding="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -91,15 +116,15 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Recommended Category -->
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardRecommendedCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
+            android:layout_marginBottom="@dimen/home_block_bet_spacing"
+            app:cardCornerRadius="@dimen/home_category_corner"
+            app:strokeWidth="0dp"
             app:cardUseCompatPadding="true"
-            android:layout_marginBottom="24dp"
-            android:backgroundTint="@color/brand_card_bg">
+            app:cardBackgroundColor="@color/brand_card_bg">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -112,50 +137,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Рекомендованная категория: 🛒 Еда — 5%"
-                    android:textSize="16sp"
                     android:textColor="@color/brand_text_primary"
-                    android:textStyle="bold"/>
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Action Buttons -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal"
-            android:layout_marginBottom="32dp">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonSmartChoice"
-                style="@style/Widget.SmartWallet.Button"
-                android:text="Умный выбор карты"
-                android:textSize="16sp"
-                app:icon="@drawable/ic_ai_24"
-                app:iconPadding="8dp"
-                app:iconGravity="textStart"
-                android:layout_marginBottom="12dp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonPay"
-                style="@style/Widget.SmartWallet.Button.Outlined"
-                android:text="Оплатить"
-                android:textSize="16sp"
-                app:icon="@drawable/ic_credit_card"
-                app:iconPadding="8dp"
-                app:iconGravity="textStart" />
-
-        </LinearLayout>
-
-        <!-- Recommendation Text -->
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardRecommendationBottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="1dp"
-            app:cardUseCompatPadding="true"
-            android:backgroundTint="@color/brand_card_bg">
+            android:layout_marginBottom="64dp"
+            app:cardBackgroundColor="@color/brand_card_bg"
+            app:cardCornerRadius="@dimen/home_recommend_corner"
+            app:strokeWidth="0dp"
+            app:cardUseCompatPadding="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -165,30 +162,72 @@
 
                 <TextView
                     android:id="@+id/textRecommendation"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="start"
                     android:text="Рекомендую оплатить картой Тинькофф Black — 5% кэшбэк"
-                    android:textSize="14sp"
-                    android:textColor="@color/brand_text_primary"
-                    android:gravity="center"
-                    android:alpha="0.8"/>
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Progress Indicator -->
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/progress"
-            android:layout_width="wrap_content"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardButtonSmartChoice"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="32dp"
-            android:indeterminate="true"
-            app:indicatorColor="@color/md_theme_primary"
-            android:visibility="gone" />
+            android:layout_marginBottom="@dimen/home_block_bet_spacing"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="@dimen/home_button_corner"
+            app:strokeWidth="0dp"
+            app:cardUseCompatPadding="true"
+            app:contentPadding="0dp">
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonSmartChoice"
+                style="@style/Widget.SmartWallet.Button.HomeInCard"
+                android:text="Умный выбор карты"
+                android:textColor="@color/brand_text_primary"
+                android:textSize="16sp"
+                app:backgroundTint="@color/white"
+                app:icon="@drawable/ic_ai_24"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                app:iconTint="@color/brand_text_primary" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardButtonPay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/home_button_corner"
+            app:cardElevation="@dimen/home_card_glow_elevation"
+            app:strokeWidth="0dp"
+            app:cardBackgroundColor="@color/brand_button_lime"
+            app:contentPadding="0dp"
+            app:cardUseCompatPadding="true">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonPay"
+                style="@style/Widget.SmartWallet.Button.HomeInCard"
+                android:text="Оплатить"
+                android:textSize="16sp"
+                android:textColor="@color/brand_text_primary"
+                app:icon="@drawable/ic_credit_card"
+                app:iconPadding="8dp"
+                app:iconGravity="textStart"
+                app:iconTint="@color/brand_text_primary"
+                app:backgroundTint="@color/brand_button_lime" />
+        </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 
-</ScrollView>
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:indicatorColor="@color/md_theme_primary" />
 
-
+</FrameLayout>

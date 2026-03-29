@@ -3,8 +3,22 @@
     <dimen name="smartwallet_button_width">340dp</dimen>
     <dimen name="smartwallet_button_height">65dp</dimen>
     <dimen name="smartwallet_button_corner">21dp</dimen>
+    <!-- Главный экран: +3dp к радиусам относительно прежних значений в разметке -->
+    <dimen name="home_button_corner">24dp</dimen>
+    <dimen name="home_bank_card_corner">23dp</dimen>
+    <dimen name="home_category_corner">19dp</dimen>
+    <dimen name="home_recommend_corner">15dp</dimen>
+    <!-- Главная: одинаковый шаг между активной картой, советами и кнопками -->
+    <dimen name="home_block_spacing">16dp</dimen>
+    <dimen name="home_block_bet_spacing">-8dp</dimen>
     <!-- Сдвиг контента вниз на основных экранах (не вход/регистрация) -->
     <dimen name="screen_content_extra_top">16dp</dimen>
+    <!-- Единые отступы шапки как на экране «Мои карты» -->
+    <dimen name="screen_content_padding_top">48dp</dimen>
+    <dimen name="screen_content_padding_horizontal">32dp</dimen>
+    <dimen name="screen_header_margin_bottom">12dp</dimen>
+    <dimen name="screen_title_subtitle_spacing">2dp</dimen>
     <!-- Поля в белой карточке входа/регистрации: уже, чтобы тень серых полей не упиралась в рамку -->
-    <dimen name="auth_form_field_horizontal_inset">10dp</dimen>
+    <!-- Вход/регистрация: узкий внутренний отступ, чтобы поля и кнопка были шире -->
+    <dimen name="auth_form_field_horizontal_inset">6dp</dimen>
 </resources>
