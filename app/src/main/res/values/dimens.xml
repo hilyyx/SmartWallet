@@ -63,9 +63,9 @@
     <!-- Вынос диаграммы на края экрана (компенсирует padding контента) — иначе круг упирается в узкую колонку -->
     <dimen name="analytics_chart_horizontal_outset">-32dp</dimen>
     <!-- Диаграмма: высота области (круг ограничен min(ширина, высота); ширину расширяем outset’ом) -->
-    <dimen name="analytics_pie_chart_height">420dp</dimen>
+    <dimen name="analytics_pie_chart_height">380dp</dimen>
     <!-- Зазор между диаграммой и рядом категорий -->
-    <dimen name="analytics_legend_top_spacing">-8dp</dimen>
+    <dimen name="analytics_legend_top_spacing">-40dp</dimen>
     <dimen name="analytics_legend_padding_top">0dp</dimen>
     <!-- Нижний отступ больше — чтобы не резалась тень у капсул -->
     <dimen name="analytics_legend_padding_bottom">14dp</dimen>
