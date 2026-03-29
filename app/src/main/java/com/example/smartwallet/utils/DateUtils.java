@@ -32,6 +32,14 @@ public class DateUtils {
         if (TextUtils.isEmpty(raw)) return "—";
         return formatApiDateLenient(raw, DISPLAY_DATE_FORMAT);
     }
+
+    /** Время для строки списка операций (над категорией). */
+    public static String formatTransactionListTime(Transaction transaction) {
+        if (transaction == null) return "—";
+        String raw = !TextUtils.isEmpty(transaction.occurredAt) ? transaction.occurredAt : transaction.createdAt;
+        if (TextUtils.isEmpty(raw)) return "—";
+        return formatApiDateLenient(raw, DISPLAY_TIME_ONLY_FORMAT);
+    }
     
     public static String formatApiDate(String apiDate, String outputFormat) {
         Date date = parseApiDateLenient(apiDate);

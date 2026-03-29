@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingStart="@dimen/screen_content_padding_horizontal"
-    android:paddingEnd="@dimen/screen_content_padding_horizontal"
+    android:paddingStart="@dimen/history_screen_padding_horizontal"
+    android:paddingEnd="@dimen/history_screen_padding_horizontal"
     android:paddingBottom="@dimen/screen_content_padding_horizontal"
     android:paddingTop="@dimen/screen_content_padding_top"
     android:background="@color/brand_background">
@@ -41,7 +41,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerHistory"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

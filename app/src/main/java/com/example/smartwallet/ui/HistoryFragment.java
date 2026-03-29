@@ -1,6 +1,8 @@
 package com.example.smartwallet.ui;
 
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +28,7 @@ import com.example.smartwallet.utils.TokenManager;
 import com.example.smartwallet.viewmodel.HistoryViewModel;
 
 import java.util.List;
+import java.util.Locale;
 
 public class HistoryFragment extends Fragment implements TransactionsAdapter.OnTransactionClickListener {
 
@@ -125,7 +128,10 @@ public class HistoryFragment extends Fragment implements TransactionsAdapter.OnT
     private void showTransactionDetailsDialog(Transaction transaction) {
         Dialog dialog = new Dialog(requireContext());
         dialog.setContentView(R.layout.dialog_transaction_details);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
         
         // Найти элементы диалога
         TextView textAmount = dialog.findViewById(R.id.textAmount);
@@ -138,19 +144,23 @@ public class HistoryFragment extends Fragment implements TransactionsAdapter.OnT
         View rowSource = dialog.findViewById(R.id.rowTransactionSource);
         
         // Заполнить данные
-        textAmount.setText(String.format("%.2f ₽", transaction.amount));
+        textAmount.setText(String.format(Locale.US, "-%.2f ₽", Math.abs(transaction.amount)));
         textCategory.setText(transaction.category);
         textDate.setText(DateUtils.formatTransactionDisplayDate(transaction));
         textCard.setText("Карта #" + transaction.cardId);
         textMcc.setText("5812"); // MCC для категории "Еда"
-        textCashback.setText(String.format("%.2f ₽", transaction.cashbackEarned));
+        if (transaction.cashbackEarned > 0.0001) {
+            textCashback.setText(String.format(Locale.US, "+%.2f ₽", transaction.cashbackEarned));
+        } else {
+            textCashback.setText(String.format(Locale.US, "%.2f ₽", transaction.cashbackEarned));
+        }
 
         if (rowSource != null && textSource != null) {
             if (transaction.source == null || transaction.source.isEmpty()) {
                 rowSource.setVisibility(View.GONE);
             } else {
                 rowSource.setVisibility(View.VISIBLE);
-                textSource.setText(transaction.source);
+                textSource.setText(formatTransactionSourceLabel(transaction.source));
             }
         }
         
@@ -160,6 +170,20 @@ public class HistoryFragment extends Fragment implements TransactionsAdapter.OnT
         dialog.show();
     }
     
+    @NonNull
+    private static String formatTransactionSourceLabel(@NonNull String source) {
+        switch (source.toLowerCase(Locale.ROOT)) {
+            case "demo":
+                return "Демо";
+            case "import":
+                return "Импорт";
+            case "manual":
+                return "Вручную";
+            default:
+                return source;
+        }
+    }
+
     /** Обновить список после демо-сидинга и т.п., если фрагмент на экране. */
     public void reloadFromServer() {
         if (historyViewModel != null) {

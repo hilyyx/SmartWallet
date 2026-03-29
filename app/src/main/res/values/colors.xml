@@ -32,8 +32,9 @@
     <!-- Bottom navigation — лаймово-светлый блок (legacy; панель в дашборде теперь белая) -->
     <color name="nav_bar_background">#EEF6D4</color>
 
-    <color name="nav_item_selected">#5A7F14</color>
-    <color name="nav_item_unselected">#7A8570</color>
+    <!-- Bottom nav: неактивные серые, активная вкладка — чёрная (tint + scale в BottomNavSelectionHelper) -->
+    <color name="nav_item_selected">#FF000000</color>
+    <color name="nav_item_unselected">#9CA3A0</color>
     <color name="nav_item_indicator">#D8EF9A</color>
     <color name="nav_item_ripple">#334CAF50</color>
 
@@ -71,4 +72,10 @@
     <color name="category_entertainment">#96CEB4</color>  <!-- Зеленый для развлечений -->
     <color name="category_health">#FFEAA7</color>         <!-- Желтый для здоровья -->
     <color name="category_other">#DDA0DD</color>          <!-- Фиолетовый для прочего -->
+
+    <!-- Элемент истории операций -->
+    <color name="transaction_category_tile_bg">#E2FBA4</color>
+    <color name="transaction_cashback_green">#38EE27</color>
+    <color name="transaction_amount_debit">#D32F2F</color>
+    <color name="transaction_cashback_chip_bg">#F6F6F8</color>
 </resources>

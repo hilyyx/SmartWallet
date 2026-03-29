@@ -29,7 +29,8 @@ public final class BottomNavSelectionHelper {
         float d = nav.getResources().getDisplayMetrics().density;
         float liftPx = -6f * d;
         float elevationPx = 12f * d;
-        float scale = 1.08f;
+        /* Чуть крупнее выбранная иконка — визуально «жирнее» рядом с серыми */
+        float scale = 1.14f;
 
         for (int i = 0; i < count; i++) {
             View child = menuView.getChildAt(i);
