@@ -15,6 +15,8 @@
 
     <!-- Единый стиль кнопок -->
     <color name="brand_button_lime">#CCFB55</color>
+    <!-- Загрузочный экран (тот же лайм, зафиксировано явно в ТЗ) -->
+    <color name="splash_screen_background">#CCFB55</color>
     <color name="brand_button_ripple">#40000000</color>
 
     <!-- Лёгкая серая обводка: белая карточка формы, вкладки, серые поля (одинаковый тон) -->

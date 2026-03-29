@@ -25,13 +25,6 @@
         <item name="android:textColor">@color/md_theme_onSurfaceVariant</item>
     </style>
 
-    <!-- Splash: фон #CCFB55, логотип @drawable/smartwallet; после показа — обычная тема -->
-    <style name="Theme.SmartWallet.Splash" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/brand_button_lime</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/smartwallet</item>
-        <item name="postSplashScreenTheme">@style/Theme.SmartWallet</item>
-    </style>
-
     <!-- Вкладки «Вход / Регистрация»: индикатор и акцент как у лаймовых кнопок -->
     <style name="Widget.SmartWallet.TabLayout.Auth" parent="Widget.Material3.TabLayout">
         <item name="android:background">@color/white</item>

@@ -52,4 +52,7 @@
     <dimen name="auth_form_tab_card_margin_horizontal">20dp</dimen>
     <!-- Чуть пространства над первым полем — чтобы не обрезалось свечение (outline) -->
     <dimen name="auth_form_first_field_extra_top">8dp</dimen>
+
+    <dimen name="splash_logo_dp">70dp</dimen>
+    <dimen name="splash_logo_inner_dp">62dp</dimen>
 </resources>

@@ -60,7 +60,6 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging)
     implementation(libs.viewpager2)
-    implementation(libs.core.splashscreen)
     
     // MPAndroidChart for analytics
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
