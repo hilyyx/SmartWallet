@@ -9,6 +9,8 @@
         <item name="android:statusBarColor">@color/md_theme_primary</item>
         <item name="android:navigationBarColor">@color/white</item>
         <item name="android:windowBackground">@color/white</item>
+        <!-- Светло-фиолетовый оверскролл Material 3 у NestedScrollView -->
+        <item name="android:colorEdgeEffect">@color/brand_background</item>
     </style>
 
     <style name="Theme.SmartWallet" parent="Base.Theme.SmartWallet" />

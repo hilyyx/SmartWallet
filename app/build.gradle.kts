@@ -63,6 +63,7 @@ dependencies {
     
     // MPAndroidChart for analytics
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
 

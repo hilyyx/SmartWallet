@@ -43,6 +43,8 @@
     <color name="md_outline_variant">#444444</color>
     <color name="md_surface_container">#1E1E1E</color>
     
+    <color name="analytics_percent_label_bg">#E0FFFFFF</color>
+
     <!-- Category Colors for Analytics (Dark Theme) -->
     <color name="category_food">#FF8A80</color>           <!-- Светло-красный для еды -->
     <color name="category_transport">#80CBC4</color>      <!-- Светло-бирюзовый для транспорта -->

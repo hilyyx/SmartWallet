@@ -70,6 +70,9 @@
     <color name="md_outline_variant">#C8E6C9</color>
     <color name="md_surface_container">#F8F9F7</color>
     
+    <!-- Аналитика: фон под процентами (#RRGGBBAA → в Android #AARRGGBB) -->
+    <color name="analytics_percent_label_bg">#E0FFFFFF</color>
+
     <!-- Category Colors for Analytics -->
     <color name="category_food">#FF6B6B</color>           <!-- Красный для еды -->
     <color name="category_transport">#4ECDC4</color>      <!-- Бирюзовый для транспорта -->

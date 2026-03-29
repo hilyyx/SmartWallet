@@ -56,4 +56,30 @@
     <dimen name="splash_logo_dp">70dp</dimen>
     <dimen name="splash_logo_inner_dp">62dp</dimen>
     <dimen name="splash_center_logo_max">240dp</dimen>
+
+    <!-- Аналитика: высота «капсулы» категории = диаметр круга с иконкой -->
+    <dimen name="analytics_category_chip_height">42dp</dimen>
+    <dimen name="analytics_category_chip_corner">21dp</dimen>
+    <!-- Вынос диаграммы на края экрана (компенсирует padding контента) — иначе круг упирается в узкую колонку -->
+    <dimen name="analytics_chart_horizontal_outset">-32dp</dimen>
+    <!-- Диаграмма: высота области (круг ограничен min(ширина, высота); ширину расширяем outset’ом) -->
+    <dimen name="analytics_pie_chart_height">420dp</dimen>
+    <!-- Зазор между диаграммой и рядом категорий -->
+    <dimen name="analytics_legend_top_spacing">-8dp</dimen>
+    <dimen name="analytics_legend_padding_top">0dp</dimen>
+    <!-- Нижний отступ больше — чтобы не резалась тень у капсул -->
+    <dimen name="analytics_legend_padding_bottom">14dp</dimen>
+    <!-- Зазоры между капсулами категорий (ряд / перенос) -->
+    <dimen name="analytics_category_chip_spacing_h">30dp</dimen>
+    <dimen name="analytics_category_chip_spacing_v">18dp</dimen>
+    <!-- Внутренние поля капсулы категории -->
+    <dimen name="analytics_category_chip_inner_padding_start">9dp</dimen>
+    <dimen name="analytics_category_chip_inner_padding_end">14dp</dimen>
+    <dimen name="analytics_category_chip_text_gap_after_icon">10dp</dimen>
+    <dimen name="analytics_category_chip_text_padding_end">14dp</dimen>
+    <!-- Белая «рамка» вокруг цветной капсулы (не растягивает сам виджет карточки) -->
+    <dimen name="analytics_category_chip_white_inset">5dp</dimen>
+    <!-- Чуть больше снизу у белой обводки — место под тень карточки -->
+    <dimen name="analytics_category_chip_white_inset_bottom">10dp</dimen>
+    <dimen name="analytics_category_chip_text_min_width">58dp</dimen>
 </resources>
