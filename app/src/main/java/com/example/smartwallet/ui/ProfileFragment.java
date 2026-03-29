@@ -1,13 +1,19 @@
 package com.example.smartwallet.ui;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -52,6 +58,7 @@ public class ProfileFragment extends Fragment {
     private TextView textName;
     private TextView textPhone;
     private TextView textEmail;
+    private View buttonProfileInfo;
     private ProgressBar progress;
     private MaterialButton buttonAiChat;
     private MaterialButton buttonLogout;
@@ -72,6 +79,7 @@ public class ProfileFragment extends Fragment {
         textName = view.findViewById(R.id.textName);
         textPhone = view.findViewById(R.id.textPhone);
         textEmail = view.findViewById(R.id.textEmail);
+        buttonProfileInfo = view.findViewById(R.id.buttonProfileInfo);
         progress = view.findViewById(R.id.progress);
         buttonAiChat = view.findViewById(R.id.buttonAiChat);
         buttonLogout = view.findViewById(R.id.buttonLogout);
@@ -79,6 +87,9 @@ public class ProfileFragment extends Fragment {
         buttonAiChat.setOnClickListener(v -> openAssistant());
         buttonLogout.setOnClickListener(v -> logout());
         buttonAiChat.post(this::applyProfileButtonGlow);
+        if (buttonProfileInfo != null) {
+            buttonProfileInfo.setOnClickListener(v -> showProfileInfoDialog());
+        }
         if (avatarButton != null) {
             avatarButton.setOnClickListener(v -> pickAvatarLauncher.launch("image/*"));
         }
@@ -88,19 +99,52 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
+    private void showProfileInfoDialog() {
+        Dialog dialog = new Dialog(requireContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_profile_info);
+        dialog.setCancelable(true);
+
+        Window window = dialog.getWindow();
+        if (window != null) {
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            WindowManager.LayoutParams lp = window.getAttributes();
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            window.setAttributes(lp);
+        }
+
+        TextView textInfo = dialog.findViewById(R.id.textProfileInfo);
+        if (textInfo != null) {
+            textInfo.setText(R.string.profile_info_dialog_full);
+        }
+        View close = dialog.findViewById(R.id.buttonCloseInfo);
+        if (close != null) {
+            close.setOnClickListener(v -> dialog.dismiss());
+        }
+        dialog.show();
+    }
+
     private void onAvatarUriPicked(@Nullable Uri uri) {
         if (uri != null) {
             uploadAvatar(uri);
         }
     }
 
-    /** Лёгкая тень у белых кнопок (API 28+ — цвет контура тени). */
+    /** Лёгкая тень у белых кнопок и круглой «инфо» (API 28+ — цвет контура тени). */
     private void applyProfileButtonGlow() {
         float elev = getResources().getDimension(R.dimen.profile_white_button_elevation);
         buttonAiChat.setElevation(elev);
         buttonLogout.setElevation(elev);
         buttonAiChat.setTranslationZ(0f);
         buttonLogout.setTranslationZ(0f);
+        if (buttonProfileInfo != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                buttonProfileInfo.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
+            }
+            buttonProfileInfo.setElevation(elev);
+            buttonProfileInfo.setTranslationZ(0f);
+        }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             return;
         }
@@ -110,6 +154,10 @@ public class ProfileFragment extends Fragment {
         buttonAiChat.setOutlineSpotShadowColor(spot);
         buttonLogout.setOutlineAmbientShadowColor(ambient);
         buttonLogout.setOutlineSpotShadowColor(spot);
+        if (buttonProfileInfo != null) {
+            buttonProfileInfo.setOutlineAmbientShadowColor(ambient);
+            buttonProfileInfo.setOutlineSpotShadowColor(spot);
+        }
     }
 
     private void loadProfile() {

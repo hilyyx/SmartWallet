@@ -32,6 +32,9 @@ import java.util.Locale;
 
 public class HistoryFragment extends Fragment implements TransactionsAdapter.OnTransactionClickListener {
 
+    /** Первый onResume совпадает с начальной загрузкой во viewModel — не дублируем запрос. */
+    private int historyResumeCount;
+
     private RecyclerView recyclerHistory;
     private SwipeRefreshLayout swipeRefresh;
     private LinearLayout emptyState;
@@ -49,6 +52,15 @@ public class HistoryFragment extends Fragment implements TransactionsAdapter.OnT
         setupViewModel();
         
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        historyResumeCount++;
+        if (historyResumeCount > 1 && historyViewModel != null) {
+            historyViewModel.loadTransactions();
+        }
     }
     
     private void initViews(View view) {

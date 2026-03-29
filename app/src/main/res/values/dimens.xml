@@ -40,6 +40,9 @@
     <dimen name="profile_white_button_elevation">10dp</dimen>
     <!-- Зазор между именем и первой кнопкой (без растягивающегося Spacer) -->
     <dimen name="profile_actions_top_spacing">18dp</dimen>
+    <dimen name="profile_info_button_size">40dp</dimen>
+    <!-- Версия у нижнего края экрана, чуть выше BottomNavigation -->
+    <dimen name="profile_version_footer_padding_bottom">10dp</dimen>
     <dimen name="screen_title_subtitle_spacing">2dp</dimen>
     <!-- Вход / регистрация: чуть шире поля — меньше отступы от края экрана -->
     <dimen name="auth_form_screen_padding_horizontal">16dp</dimen>

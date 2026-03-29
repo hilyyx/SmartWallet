@@ -2,6 +2,9 @@
     <string name="app_name">SmartWallet</string>
     <string name="login_tab">Вход</string>
     <string name="register_tab">Регистрация</string>
+    <string name="auth_remember_me">Запомнить меня</string>
+    <string name="register_welcome">Добро пожаловать!</string>
+    <string name="register_success_need_login">Регистрация успешна. Войдите в систему.</string>
     <string name="fill_all_fields">Заполните все поля</string>
     <string name="auth_failed">Ошибка авторизации</string>
     <string name="welcome_title">Добро пожаловать в SmartWallet!</string>
@@ -31,6 +34,15 @@
     <string name="pay_confirm_no_qr">Нет данных QR</string>
     <string name="pay_confirm_need_login">Войдите в аккаунт, чтобы получить рекомендацию карты</string>
     <string name="pay_confirm_best_card_error">Не удалось получить рекомендацию. Попробуйте позже.</string>
+    <string name="pay_confirm_button">Подтвердить покупку</string>
+    <string name="pay_confirm_need_card">Нужна хотя бы одна карта и успешная рекомендация для оплаты.</string>
+    <string name="pay_confirm_amount_default_hint">Сумма в QR не распознана — для операции указано 1,00 ₽.</string>
+    <string name="pay_confirm_success">Оплата прошла успешно</string>
+    <string name="pay_confirm_pay_error">Не удалось провести оплату. Попробуйте позже.</string>
+
+    <string name="profile_screen_version">v1.1</string>
+    <string name="profile_info_button_cd">Информация о приложении</string>
+    <string name="profile_info_dialog_full">SmartWallet помогает выбрать карту с лучшим кэшбэком, смотреть историю операций и получать советы от AI‑ассистента. \n\nБыстрые подсказки:\n• На главной доступна оплата по QR и советы.\n• В «Карты» можно добавить карту вручную или через NFC, если устройство поддерживает чтение карты.\n• История и аналитика обновляются по данным с сервера.</string>
     <string name="home_finance_tip_prompt">Нажмите «Финансовый совет», чтобы получить короткий совет.</string>
 
     <!-- Короткие советы для блока «нейросеть» на главной -->

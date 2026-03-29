@@ -14,6 +14,9 @@ public final class PayQrPayloadHelper {
 
     private static final Pattern SUM_KOPEKS = Pattern.compile("Sum=(\\d+)", Pattern.CASE_INSENSITIVE);
     private static final Pattern SUM_RUB = Pattern.compile("SumRub=([\\d.,]+)", Pattern.CASE_INSENSITIVE);
+    /** Текст вроде «стоимость: 150» / «в отправке написана стоимость: 1 234,50». */
+    private static final Pattern SUM_STOIMOST_LABEL = Pattern.compile(
+            "(?i)стоимость\\s*[:\\-]?\\s*([\\d\\s\\u00A0.,]+)");
 
     private PayQrPayloadHelper() {}
 
@@ -37,6 +40,17 @@ public final class PayQrPayloadHelper {
                 return k / 100.0;
             } catch (NumberFormatException ignored) {
                 return null;
+            }
+        }
+        Matcher ms = SUM_STOIMOST_LABEL.matcher(raw);
+        if (ms.find()) {
+            String num = ms.group(1).replace("\u00A0", "").replace(" ", "").replace(',', '.');
+            if (!num.isEmpty()) {
+                try {
+                    return Double.parseDouble(num);
+                } catch (NumberFormatException ignored) {
+                    return null;
+                }
             }
         }
         return null;
