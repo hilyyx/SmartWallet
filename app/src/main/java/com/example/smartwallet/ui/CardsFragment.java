@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,13 +51,13 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
     private RecyclerView recyclerCards;
     private LinearLayout emptyState;
     private View errorState;
-    private ProgressBar progress;
+    private View progress;
+    private View rowSelectedCashback;
     private FloatingActionButton fabAddCard;
     private MaterialCardView cardSelectedCardInfo;
     private MaterialCardView cardCardsStatistics;
     private TextView textSelectedCardTitle;
     private TextView textSelectedCardDetails;
-    private TextView textSelectedCardCashbackLabel;
     private TextView textSelectedCardCategories;
     private CardsAdapter cardsAdapter;
     private CardsApi cardsApi;
@@ -98,9 +97,9 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
         cardCardsStatistics = view.findViewById(R.id.cardCardsStatistics);
         textSelectedCardTitle = view.findViewById(R.id.textSelectedCardTitle);
         textSelectedCardDetails = view.findViewById(R.id.textSelectedCardDetails);
-        textSelectedCardCashbackLabel = view.findViewById(R.id.textSelectedCardCashbackLabel);
         textSelectedCardCategories = view.findViewById(R.id.textSelectedCardCategories);
-        
+        rowSelectedCashback = view.findViewById(R.id.rowSelectedCashback);
+
         // Statistics views
         textTotalCards = view.findViewById(R.id.textTotalCards);
         textTotalLimit = view.findViewById(R.id.textTotalLimit);
@@ -392,11 +391,12 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
     }
 
     private void bindSelectedCardCashbackCategories(@NonNull Card c) {
-        if (textSelectedCardCashbackLabel == null || textSelectedCardCategories == null) return;
+        if (textSelectedCardCategories == null) return;
         if (c.cashbackRules == null || c.cashbackRules.isEmpty()) {
-            textSelectedCardCashbackLabel.setVisibility(View.GONE);
-            textSelectedCardCategories.setVisibility(View.GONE);
             textSelectedCardCategories.setText("");
+            if (rowSelectedCashback != null) {
+                rowSelectedCashback.setVisibility(View.GONE);
+            }
             return;
         }
         StringBuilder sb = new StringBuilder();
@@ -405,8 +405,9 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
             sb.append(e.getKey()).append(" — ").append(e.getValue()).append('%');
         }
         textSelectedCardCategories.setText(sb.toString());
-        textSelectedCardCashbackLabel.setVisibility(View.VISIBLE);
-        textSelectedCardCategories.setVisibility(View.VISIBLE);
+        if (rowSelectedCashback != null) {
+            rowSelectedCashback.setVisibility(View.VISIBLE);
+        }
     }
 
     @NonNull

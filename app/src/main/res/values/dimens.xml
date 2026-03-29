@@ -36,8 +36,8 @@
     <!-- Профиль: зазор между email в шапке и аватаром -->
     <dimen name="profile_avatar_top_spacing">24dp</dimen>
     <dimen name="profile_avatar_size">120dp</dimen>
-    <!-- Профиль: едва заметная тень у белых кнопок -->
-    <dimen name="profile_white_button_elevation">3dp</dimen>
+    <!-- Профиль: заметное свечение белых кнопок (не перегружать экран) -->
+    <dimen name="profile_white_button_elevation">10dp</dimen>
     <!-- Зазор между именем и первой кнопкой (без растягивающегося Spacer) -->
     <dimen name="profile_actions_top_spacing">18dp</dimen>
     <dimen name="screen_title_subtitle_spacing">2dp</dimen>

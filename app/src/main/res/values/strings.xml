@@ -66,4 +66,9 @@
         <item>Совет: платите картой с кэшбэком там, где правила вам понятны и честны.</item>
         <item>Нейросеть: раз в неделю 5 минут на сводку трат даёт больше контроля, чем жёсткие запреты.</item>
     </string-array>
+
+    <string name="assistant_back_cd">Назад</string>
+    <string name="assistant_robot_cd">Ассистент</string>
+    <string name="assistant_send_cd">Отправить сообщение</string>
+    <string name="assistant_input_hint">Введите сообщение…</string>
 </resources>
