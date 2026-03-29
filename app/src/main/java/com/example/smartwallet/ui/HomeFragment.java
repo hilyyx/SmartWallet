@@ -41,8 +41,6 @@ public class HomeFragment extends Fragment {
     private MaterialCardView cardActiveCard;
     private MaterialCardView cardRecommendedCategory;
     private MaterialCardView cardRecommendationBottom;
-    private MaterialCardView cardButtonSmartChoice;
-    private MaterialCardView cardButtonPay;
     private TextView textActiveCardSectionTitle;
     private TextView textActiveCardNumber;
     private TextView textActiveCardName;
@@ -88,8 +86,6 @@ public class HomeFragment extends Fragment {
         cardActiveCard = view.findViewById(R.id.cardActiveCard);
         cardRecommendedCategory = view.findViewById(R.id.cardRecommendedCategory);
         cardRecommendationBottom = view.findViewById(R.id.cardRecommendationBottom);
-        cardButtonSmartChoice = view.findViewById(R.id.cardButtonSmartChoice);
-        cardButtonPay = view.findViewById(R.id.cardButtonPay);
         textActiveCardSectionTitle = view.findViewById(R.id.textActiveCardSectionTitle);
         textActiveCardNumber = view.findViewById(R.id.textActiveCardNumber);
         textActiveCardName = view.findViewById(R.id.textActiveCardName);
@@ -102,10 +98,7 @@ public class HomeFragment extends Fragment {
         progress = view.findViewById(R.id.progress);
     }
 
-    /**
-     * Свечение #696969 @ 15% без обводки. Blur из макета (~34) на View не переносится —
-     * задаём размах через {@link R.dimen#home_card_glow_elevation} и цвет контура тени (API 28+).
-     */
+    /** Свечение без обводки (цвет контура тени — API 28+). У «Умного выбора» — как у блока рекомендованной категории. */
     private void applyHomeCardGlowShadow() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             return;
@@ -114,15 +107,15 @@ public class HomeFragment extends Fragment {
         MaterialCardView[] cards = {
                 cardActiveCard,
                 cardRecommendedCategory,
-                cardRecommendationBottom,
-                cardButtonSmartChoice,
-                cardButtonPay
+                cardRecommendationBottom
         };
         for (MaterialCardView card : cards) {
             if (card == null) continue;
             card.setOutlineAmbientShadowColor(glow);
             card.setOutlineSpotShadowColor(glow);
         }
+        buttonSmartChoice.setOutlineAmbientShadowColor(glow);
+        buttonSmartChoice.setOutlineSpotShadowColor(glow);
     }
 
     private void setupClickListeners() {

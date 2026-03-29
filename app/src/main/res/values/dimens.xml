@@ -11,6 +11,10 @@
     <!-- Главная: одинаковый шаг между активной картой, советами и кнопками -->
     <dimen name="home_block_spacing">16dp</dimen>
     <dimen name="home_block_bet_spacing">-8dp</dimen>
+    <!-- Главная: тень у активной карты / кнопки «Оплатить» -->
+    <dimen name="home_card_glow_elevation">12dp</dimen>
+    <!-- Тень у блоков советов (категория + текст рекомендации) -->
+    <dimen name="home_advice_cards_elevation">6dp</dimen>
     <!-- Сдвиг контента вниз на основных экранах (не вход/регистрация) -->
     <dimen name="screen_content_extra_top">16dp</dimen>
     <!-- Единые отступы шапки как на экране «Мои карты» -->
