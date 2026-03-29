@@ -17,6 +17,8 @@ public final class PayQrPayloadHelper {
     /** Текст вроде «стоимость: 150» / «в отправке написана стоимость: 1 234,50». */
     private static final Pattern SUM_STOIMOST_LABEL = Pattern.compile(
             "(?i)стоимость\\s*[:\\-]?\\s*([\\d\\s\\u00A0.,]+)");
+    private static final Pattern NAME_FIELD = Pattern.compile("(?i)(?:^|\\|)Name=([^|\\n]+)");
+    private static final Pattern PAYEE_NAME_FIELD = Pattern.compile("(?i)(?:^|\\|)PayeeName=([^|\\n]+)");
 
     private PayQrPayloadHelper() {}
 
@@ -71,6 +73,43 @@ public final class PayQrPayloadHelper {
             return "здоровье";
         }
         return "прочее";
+    }
+
+    /** Человекочитаемое название категории для UI. */
+    @NonNull
+    public static String categoryDisplayTitle(@NonNull String categoryKey) {
+        switch (categoryKey.toLowerCase(Locale.forLanguageTag("ru"))) {
+            case "еда":
+                return "Еда";
+            case "транспорт":
+                return "Транспорт";
+            case "здоровье":
+                return "Здоровье";
+            case "прочее":
+            default:
+                return "Прочее";
+        }
+    }
+
+    /**
+     * Название получателя из QR (формат НСПК и аналоги), если есть.
+     */
+    @Nullable
+    public static String parseMerchantName(@Nullable String raw) {
+        if (raw == null || raw.isEmpty()) {
+            return null;
+        }
+        Matcher m = NAME_FIELD.matcher(raw);
+        if (m.find()) {
+            String s = m.group(1).trim();
+            return s.isEmpty() ? null : s;
+        }
+        m = PAYEE_NAME_FIELD.matcher(raw);
+        if (m.find()) {
+            String s = m.group(1).trim();
+            return s.isEmpty() ? null : s;
+        }
+        return null;
     }
 
     @NonNull

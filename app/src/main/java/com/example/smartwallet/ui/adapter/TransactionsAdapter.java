@@ -19,12 +19,15 @@ import com.example.smartwallet.utils.TransactionCategoryIcons;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapter.TransactionViewHolder> {
 
     private List<Transaction> transactions = new ArrayList<>();
+    private Map<Integer, String> cardLabels = Collections.emptyMap();
     private OnTransactionClickListener listener;
 
     public interface OnTransactionClickListener {
@@ -37,6 +40,12 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
 
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
+        notifyDataSetChanged();
+    }
+
+    /** id карты → подпись «Банк · название карты». */
+    public void setCardLabels(Map<Integer, String> labels) {
+        this.cardLabels = labels != null ? labels : Collections.emptyMap();
         notifyDataSetChanged();
     }
 
@@ -69,7 +78,7 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
     @Override
     public void onBindViewHolder(@NonNull TransactionViewHolder holder, int position) {
         Transaction transaction = transactions.get(position);
-        holder.bind(transaction);
+        holder.bind(transaction, cardLabels);
 
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
@@ -111,7 +120,7 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
             }
         }
 
-        void bind(Transaction transaction) {
+        void bind(Transaction transaction, Map<Integer, String> cardLabels) {
             textDate.setText(DateUtils.formatTransactionListTime(transaction));
 
             textCategory.setText(capitalizeCategory(transaction.category));
@@ -120,7 +129,12 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
 
             textAmount.setText(String.format(Locale.US, "-%.2f ₽", Math.abs(transaction.amount)));
 
-            textCard.setText("Карта #" + transaction.cardId);
+            String cardLine = cardLabels != null ? cardLabels.get(transaction.cardId) : null;
+            if (cardLine != null && !cardLine.isEmpty()) {
+                textCard.setText(cardLine);
+            } else {
+                textCard.setText("Карта #" + transaction.cardId);
+            }
 
             if (textSourceBadge != null) {
                 String src = transaction.source;

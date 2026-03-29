@@ -35,7 +35,13 @@
     <string name="pay_qr_capture_failed">Не удалось снять кадр</string>
     <string name="pay_qr_not_found">QR-код не найден на снимке</string>
     <string name="pay_confirm_title">Подтверждение оплаты</string>
-    <string name="pay_confirm_payment_block">Платёж</string>
+    <string name="pay_confirm_payee_unknown">Получатель не указан в QR</string>
+    <string name="pay_confirm_category_line">Категория: %s</string>
+    <string name="pay_confirm_amount_not_in_qr">Сумма не распознана</string>
+    <string name="pay_confirm_time_template">Время: %s</string>
+    <string name="pay_confirm_cards_ranked_header">Ваши карты (по убыванию кэшбэка на эту покупку)</string>
+    <string name="pay_confirm_card_option_format">%1$s · •••• %2$s · %3$d%% · +%4$.2f ₽</string>
+    <string name="pay_confirm_no_cards_saved">Нет сохранённых карт — добавьте карту в разделе «Карты»</string>
     <string name="pay_confirm_best_card_block">Наилучшая карта для оплаты</string>
     <string name="pay_confirm_no_qr">Нет данных QR</string>
     <string name="pay_confirm_need_login">Войдите в аккаунт, чтобы получить рекомендацию карты</string>

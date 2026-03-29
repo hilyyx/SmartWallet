@@ -27,8 +27,10 @@ import com.example.smartwallet.utils.DateUtils;
 import com.example.smartwallet.utils.TokenManager;
 import com.example.smartwallet.viewmodel.HistoryViewModel;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class HistoryFragment extends Fragment implements TransactionsAdapter.OnTransactionClickListener {
 
@@ -41,6 +43,7 @@ public class HistoryFragment extends Fragment implements TransactionsAdapter.OnT
     private ProgressBar progress;
     private TransactionsAdapter transactionsAdapter;
     private HistoryViewModel historyViewModel;
+    private Map<Integer, String> cardLabelsForDetails = Collections.emptyMap();
 
     @Nullable
     @Override
@@ -93,6 +96,11 @@ public class HistoryFragment extends Fragment implements TransactionsAdapter.OnT
         historyViewModel.getTransactions().observe(getViewLifecycleOwner(), transactions -> {
             transactionsAdapter.setTransactions(transactions);
             updateEmptyState(transactions.isEmpty());
+        });
+
+        historyViewModel.getCardLabels().observe(getViewLifecycleOwner(), labels -> {
+            cardLabelsForDetails = labels != null ? labels : Collections.emptyMap();
+            transactionsAdapter.setCardLabels(cardLabelsForDetails);
         });
         
         // Observe loading state
@@ -159,7 +167,10 @@ public class HistoryFragment extends Fragment implements TransactionsAdapter.OnT
         textAmount.setText(String.format(Locale.US, "-%.2f ₽", Math.abs(transaction.amount)));
         textCategory.setText(transaction.category);
         textDate.setText(DateUtils.formatTransactionDisplayDate(transaction));
-        textCard.setText("Карта #" + transaction.cardId);
+        String cardLine = cardLabelsForDetails.get(transaction.cardId);
+        textCard.setText(cardLine != null && !cardLine.isEmpty()
+                ? cardLine
+                : ("Карта #" + transaction.cardId));
         textMcc.setText("5812"); // MCC для категории "Еда"
         if (transaction.cashbackEarned > 0.0001) {
             textCashback.setText(String.format(Locale.US, "+%.2f ₽", transaction.cashbackEarned));
