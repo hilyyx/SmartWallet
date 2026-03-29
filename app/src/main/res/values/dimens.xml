@@ -5,4 +5,6 @@
     <dimen name="smartwallet_button_corner">21dp</dimen>
     <!-- Сдвиг контента вниз на основных экранах (не вход/регистрация) -->
     <dimen name="screen_content_extra_top">16dp</dimen>
+    <!-- Поля в белой карточке входа/регистрации: уже, чтобы тень серых полей не упиралась в рамку -->
+    <dimen name="auth_form_field_horizontal_inset">10dp</dimen>
 </resources>

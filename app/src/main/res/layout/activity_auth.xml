@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".ui.AuthActivity">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/brand_background">
+        android:background="@color/white">
 
         <!-- TabLayout в стиле карточки -->
         <com.google.android.material.card.MaterialCardView
@@ -22,18 +23,16 @@
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="6dp"
-            app:strokeColor="@color/brand_border"
+            app:strokeColor="@color/auth_card_stroke"
             app:strokeWidth="1dp"
-            android:backgroundTint="@color/brand_card_bg">
+            app:cardBackgroundColor="@color/white">
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/authTabs"
+                style="@style/Widget.SmartWallet.TabLayout.Auth"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:tabIndicatorFullWidth="true"
-                app:tabIndicatorColor="@color/brand_primary"
-                app:tabSelectedTextColor="@color/brand_primary"
-                app:tabTextColor="@color/brand_text_secondary"
                 app:tabTextAppearance="@style/TextAppearance.Material3.BodyLarge"
                 app:tabMode="fixed"
                 app:tabGravity="fill" />

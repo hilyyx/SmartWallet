@@ -7,8 +7,8 @@
         <item name="colorSecondary">@color/md_theme_secondary</item>
         <item name="colorOnSecondary">@color/md_theme_onSecondary</item>
         <item name="android:statusBarColor">@color/md_theme_primary</item>
-        <item name="android:navigationBarColor">@color/md_theme_surface</item>
-        <item name="android:windowBackground">@color/md_theme_background</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:windowBackground">@color/white</item>
     </style>
 
     <style name="Theme.SmartWallet" parent="Base.Theme.SmartWallet" />
@@ -18,6 +18,24 @@
         <item name="windowSplashScreenBackground">@color/brand_button_lime</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/smartwallet</item>
         <item name="postSplashScreenTheme">@style/Theme.SmartWallet</item>
+    </style>
+
+    <!-- Вкладки «Вход / Регистрация»: индикатор и акцент как у лаймовых кнопок -->
+    <style name="Widget.SmartWallet.TabLayout.Auth" parent="Widget.Material3.TabLayout">
+        <item name="android:background">@color/white</item>
+        <item name="tabIndicatorColor">@color/brand_button_lime</item>
+        <item name="tabSelectedTextColor">@color/brand_text_primary</item>
+        <item name="tabTextColor">@color/brand_text_secondary</item>
+        <item name="tabRippleColor">@color/brand_button_ripple</item>
+        <item name="tabBackground">@android:color/transparent</item>
+    </style>
+
+    <!-- Поле пароля внутри серой карточки (как диалог «Добавить карту») -->
+    <style name="Widget.SmartWallet.TextInputLayout.AuthPassword" parent="Widget.Material3.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeColor">@android:color/transparent</item>
+        <item name="boxBackgroundColor">@android:color/transparent</item>
+        <item name="hintEnabled">false</item>
     </style>
 
     <!-- Окна «Хотите добавить карту?» и т.п. -->

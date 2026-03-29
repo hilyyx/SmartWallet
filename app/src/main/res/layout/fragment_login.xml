@@ -3,17 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:background="#F1F8E9">
+    android:fillViewport="true"
+    android:background="@color/white"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
     <LinearLayout
         android:orientation="vertical"
         android:gravity="center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:padding="24dp">
 
-        <!-- Логотип -->
         <ImageView
             android:layout_width="200dp"
             android:layout_height="80dp"
@@ -27,67 +29,113 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
             app:cardCornerRadius="20dp"
             app:cardElevation="6dp"
-            app:strokeColor="#A5D6A7"
+            app:strokeColor="@color/auth_card_stroke"
             app:strokeWidth="1dp"
-            android:backgroundTint="#FFFFFF">
+            app:cardBackgroundColor="@color/white">
 
             <LinearLayout
                 android:orientation="vertical"
                 android:gravity="center_horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:clipChildren="false"
+                android:clipToPadding="false"
                 android:padding="20dp">
 
-                <com.google.android.material.textfield.TextInputLayout
+                <!-- Как в dialog_add_card.xml: серая карточка + EditText; отступы по бокам — без обрезки тенью у белой рамки -->
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Телефон"
-                    app:boxBackgroundMode="outline"
-                    app:boxStrokeColor="#81C784"
-                    app:hintTextColor="#4CAF50">
+                    android:layout_height="@dimen/smartwallet_button_height"
+                    android:layout_marginStart="@dimen/auth_form_field_horizontal_inset"
+                    android:layout_marginEnd="@dimen/auth_form_field_horizontal_inset"
+                    android:layout_marginBottom="18dp"
+                    app:cardBackgroundColor="@color/add_card_field_fill"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/auth_card_stroke"
+                    app:strokeWidth="1dp">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <EditText
                         android:id="@+id/inputPhone"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:gravity="center_vertical"
+                        android:hint="Телефон"
+                        android:importantForAutofill="yes"
                         android:inputType="number"
                         android:maxLength="15"
-                        android:textColor="#212121" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:paddingHorizontal="16dp"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/add_card_hint_gray"
+                        android:textSize="17sp" />
+                </com.google.android.material.card.MaterialCardView>
 
-                <com.google.android.material.textfield.TextInputLayout
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Пароль"
-                    android:layout_marginTop="16dp"
-                    app:boxBackgroundMode="outline"
-                    app:boxStrokeColor="#81C784"
-                    app:endIconMode="password_toggle"
-                    app:hintTextColor="#4CAF50">
+                    android:layout_height="@dimen/smartwallet_button_height"
+                    android:layout_marginStart="@dimen/auth_form_field_horizontal_inset"
+                    android:layout_marginEnd="@dimen/auth_form_field_horizontal_inset"
+                    android:layout_marginBottom="18dp"
+                    app:cardBackgroundColor="@color/add_card_field_fill"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/auth_card_stroke"
+                    app:strokeWidth="1dp">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/inputPassword"
+                    <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textPassword"
-                        android:textColor="#212121" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_height="match_parent">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            style="@style/Widget.SmartWallet.TextInputLayout.AuthPassword"
+                            app:endIconMode="password_toggle"
+                            app:endIconTint="@color/add_card_edit_gray">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/inputPassword"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@android:color/transparent"
+                                android:gravity="start|center_vertical"
+                                android:hint="Пароль"
+                                android:includeFontPadding="false"
+                                android:inputType="textPassword"
+                                android:minHeight="0dp"
+                                android:paddingHorizontal="16dp"
+                                android:paddingVertical="0dp"
+                                android:textColor="@color/black"
+                                android:textColorHint="@color/add_card_hint_gray"
+                                android:textSize="17sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </FrameLayout>
+                </com.google.android.material.card.MaterialCardView>
 
                 <TextView
                     android:id="@+id/textForgotPassword"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/auth_form_field_horizontal_inset"
+                    android:layout_marginEnd="@dimen/auth_form_field_horizontal_inset"
                     android:text="Забыли пароль?"
                     android:textColor="#388E3C"
                     android:textSize="14sp"
-                    android:layout_marginTop="8dp"
-                    android:layout_gravity="end" />
+                    android:layout_marginTop="0dp"
+                    android:gravity="end" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/buttonLogin"
-                    style="@style/Widget.SmartWallet.Button"
+                    style="@style/Widget.SmartWallet.Button.FullWidth"
+                    android:layout_marginStart="@dimen/auth_form_field_horizontal_inset"
+                    android:layout_marginEnd="@dimen/auth_form_field_horizontal_inset"
                     android:layout_marginTop="24dp"
                     android:text="Войти"
                     android:textSize="16sp" />
@@ -103,7 +151,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Подпись под формой -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
