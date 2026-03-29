@@ -19,6 +19,8 @@ public class DashboardActivity extends AppCompatActivity {
     private boolean nfcReaderEnabled = false;
     private boolean nfcPromptShowing = false;
     private long lastNfcPromptAtMs = 0L;
+    /** Демо-костыль: по очереди подставляем «ловушки» для 1-го и 2-го прикладывания карты по NFC. */
+    private int nfcAddCardStubSequence = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -158,8 +160,14 @@ public class DashboardActivity extends AppCompatActivity {
                 .setPositiveButton("Добавить", (d, which) -> {
                     Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
                     if (f instanceof CardsFragment) {
-                        String suggestedName = hint.scheme != null ? hint.scheme + " карта" : "Новая карта";
-                        ((CardsFragment) f).showAddCardDialog(suggestedName);
+                        int idx = (nfcAddCardStubSequence++) % 2;
+                        if (idx == 0) {
+                            ((CardsFragment) f).showAddCardDialog(
+                                    "Альфа Банк", "edition", "1055", "50200");
+                        } else {
+                            ((CardsFragment) f).showAddCardDialog(
+                                    "Т-Банк", "gold card", "5032", "17000");
+                        }
                     }
                 })
                 .setOnDismissListener(d -> nfcPromptShowing = false)

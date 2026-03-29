@@ -255,10 +255,17 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
     }
     
     private void showAddCardDialog() {
-        showAddCardDialog(null);
+        showAddCardDialog(null, null, null, null);
     }
 
-    public void showAddCardDialog(@Nullable String suggestedCardName) {
+    /**
+     * @param bankName,cardName,last4,limitMonthly опциональное предзаполнение (например после NFC).
+     */
+    public void showAddCardDialog(
+            @Nullable String bankName,
+            @Nullable String cardName,
+            @Nullable String last4,
+            @Nullable String limitMonthly) {
         Dialog dialog = new Dialog(requireContext());
         dialog.setContentView(R.layout.dialog_add_card);
         if (dialog.getWindow() != null) {
@@ -271,8 +278,17 @@ public class CardsFragment extends Fragment implements CardsAdapter.OnCardClickL
         EditText editLast4 = dialog.findViewById(R.id.editLast4);
         EditText editLimitMonthly = dialog.findViewById(R.id.editLimitMonthly);
 
-        if (!TextUtils.isEmpty(suggestedCardName) && editCardName != null) {
-            editCardName.setText(suggestedCardName);
+        if (!TextUtils.isEmpty(bankName) && editBankName != null) {
+            editBankName.setText(bankName);
+        }
+        if (!TextUtils.isEmpty(cardName) && editCardName != null) {
+            editCardName.setText(cardName);
+        }
+        if (!TextUtils.isEmpty(last4) && editLast4 != null) {
+            editLast4.setText(last4);
+        }
+        if (!TextUtils.isEmpty(limitMonthly) && editLimitMonthly != null) {
+            editLimitMonthly.setText(limitMonthly);
         }
         
         dialog.findViewById(R.id.buttonCancel).setOnClickListener(v -> dialog.dismiss());
