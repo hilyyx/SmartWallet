@@ -107,9 +107,15 @@ public class RegisterFragment extends Fragment {
             public void onResponse(@NonNull Call<TokenResponse> call, @NonNull Response<TokenResponse> response) {
                 setLoading(false);
                 if (response.isSuccessful() && response.body() != null) {
-                    // Registration successful, go to login
-                    Toast.makeText(requireContext(), "Регистрация успешна! Войдите в систему.", Toast.LENGTH_SHORT).show();
-                    goToLogin();
+                    String access = response.body().accessToken;
+                    if (access != null && !access.isEmpty()) {
+                        TokenManager.getInstance(requireContext()).saveToken(access, true);
+                        Toast.makeText(requireContext(), R.string.register_welcome, Toast.LENGTH_SHORT).show();
+                        openDashboard();
+                    } else {
+                        Toast.makeText(requireContext(), R.string.register_success_need_login, Toast.LENGTH_SHORT).show();
+                        goToLogin();
+                    }
                 } else {
                     Toast.makeText(
                             requireContext(),
@@ -140,6 +146,12 @@ public class RegisterFragment extends Fragment {
         if (getActivity() instanceof AuthActivity) {
             ((AuthActivity) getActivity()).switchToLogin();
         }
+    }
+
+    private void openDashboard() {
+        Intent intent = new Intent(requireContext(), DashboardActivity.class);
+        startActivity(intent);
+        requireActivity().finish();
     }
 }
 

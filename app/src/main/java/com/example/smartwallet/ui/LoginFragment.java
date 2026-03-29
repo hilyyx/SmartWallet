@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -35,6 +36,7 @@ public class LoginFragment extends Fragment {
 
     private EditText phoneInput;
     private EditText passwordInput;
+    private CheckBox checkboxRememberMe;
     private ProgressBar progressBar;
 
     @Nullable
@@ -43,6 +45,7 @@ public class LoginFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         phoneInput = view.findViewById(R.id.inputPhone);
         passwordInput = view.findViewById(R.id.inputPassword);
+        checkboxRememberMe = view.findViewById(R.id.checkboxRememberMe);
         progressBar = view.findViewById(R.id.progress);
         Button loginButton = view.findViewById(R.id.buttonLogin);
 
@@ -87,8 +90,8 @@ public class LoginFragment extends Fragment {
             public void onResponse(@NonNull Call<TokenResponse> call, @NonNull Response<TokenResponse> response) {
                 setLoading(false);
                 if (response.isSuccessful() && response.body() != null) {
-                    // Save token
-                    TokenManager.getInstance(requireContext()).saveToken(response.body().accessToken);
+                    boolean remember = checkboxRememberMe == null || checkboxRememberMe.isChecked();
+                    TokenManager.getInstance(requireContext()).saveToken(response.body().accessToken, remember);
                     openWelcome();
                 } else {
                     Toast.makeText(
