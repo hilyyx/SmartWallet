@@ -1,5 +1,6 @@
 package com.example.smartwallet.ui;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,11 +19,9 @@ import com.example.smartwallet.network.ApiClient;
 import com.example.smartwallet.network.AssistantApi;
 import com.example.smartwallet.network.CashbackApi;
 import com.example.smartwallet.network.CardsApi;
-import com.example.smartwallet.network.TransactionsApi;
 import com.example.smartwallet.network.dto.BestCardResponse;
 import com.example.smartwallet.network.dto.Card;
 import com.example.smartwallet.network.dto.Recommendation;
-import com.example.smartwallet.network.dto.TransactionRequest;
 import com.example.smartwallet.utils.CashbackRulesGenerator;
 import com.example.smartwallet.utils.ErrorHandler;
 import com.example.smartwallet.utils.TokenManager;
@@ -54,7 +53,6 @@ public class HomeFragment extends Fragment {
 
     private CashbackApi cashbackApi;
     private CardsApi cardsApi;
-    private TransactionsApi transactionsApi;
     private AssistantApi assistantApi;
     private TokenManager tokenManager;
 
@@ -72,7 +70,6 @@ public class HomeFragment extends Fragment {
         
         cashbackApi = ApiClient.getCashbackApi();
         cardsApi = ApiClient.getCardsApi();
-        transactionsApi = ApiClient.getTransactionsApi();
         assistantApi = ApiClient.getAssistantApi();
         tokenManager = TokenManager.getInstance(requireContext());
         
@@ -120,7 +117,8 @@ public class HomeFragment extends Fragment {
 
     private void setupClickListeners() {
         buttonSmartChoice.setOnClickListener(v -> getBestCard());
-        buttonPay.setOnClickListener(v -> createTransaction());
+        buttonPay.setOnClickListener(v ->
+                startActivity(new Intent(requireContext(), PayQrScanActivity.class)));
     }
     
     private void loadActiveCard() {
@@ -244,43 +242,6 @@ public class HomeFragment extends Fragment {
             textRecommendation.setText(String.format("Рекомендую оплатить картой %s %s — %d%% кэшбэк", 
                     bestCard.bankName, bestCard.cardName, bestCard.cashbackPercentage));
         }
-    }
-    
-    private void createTransaction() {
-        if (activeCard == null) {
-            Toast.makeText(requireContext(), "Нет активной карты", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        
-        String token = tokenManager.getToken();
-        if (token == null) {
-            Toast.makeText(requireContext(), "Токен не найден. Войдите в систему.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        
-        setLoading(true);
-        String authToken = "Bearer " + token;
-        
-        // Create fake transaction
-        TransactionRequest request = new TransactionRequest(1000.0, "еда", activeCard.id);
-        
-        transactionsApi.createTransaction(authToken, request).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
-                setLoading(false);
-                if (response.isSuccessful()) {
-                    Toast.makeText(requireContext(), "Транзакция успешно создана!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(requireContext(), "Ошибка создания транзакции", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                setLoading(false);
-                ErrorHandler.showError(requireContext(), t);
-            }
-        });
     }
     
     private void setLoading(boolean loading) {

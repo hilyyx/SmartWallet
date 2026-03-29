@@ -18,4 +18,17 @@
     <string name="profile_avatar_no_endpoint">Сервер не принял файл. Нужен POST multipart на auth/profile/avatar (поле file).</string>
     <string name="add_card_close_cd">Закрыть</string>
     <string name="api_url_emulator_only">В проекте указан 10.0.2.2 — это адрес «ПК из эмулятора». На обычном телефоне не сработает. В local.properties задайте IP вашего компьютера в Wi‑Fi и пересоберите APK.</string>
+
+    <string name="pay_qr_scan_title">Оплата по QR</string>
+    <string name="pay_qr_capture">Сфотографировать</string>
+    <string name="pay_qr_camera_denied">Нужен доступ к камере для сканирования QR</string>
+    <string name="pay_qr_camera_error">Не удалось запустить камеру</string>
+    <string name="pay_qr_capture_failed">Не удалось снять кадр</string>
+    <string name="pay_qr_not_found">QR-код не найден на снимке</string>
+    <string name="pay_confirm_title">Подтверждение оплаты</string>
+    <string name="pay_confirm_payment_block">Платёж</string>
+    <string name="pay_confirm_best_card_block">Наилучшая карта для оплаты</string>
+    <string name="pay_confirm_no_qr">Нет данных QR</string>
+    <string name="pay_confirm_need_login">Войдите в аккаунт, чтобы получить рекомендацию карты</string>
+    <string name="pay_confirm_best_card_error">Не удалось получить рекомендацию. Попробуйте позже.</string>
 </resources>

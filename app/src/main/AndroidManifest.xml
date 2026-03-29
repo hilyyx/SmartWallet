@@ -5,6 +5,11 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <uses-feature
         android:name="android.hardware.nfc"
@@ -24,6 +29,15 @@
         <activity android:name=".ui.WelcomeActivity" />
         <activity android:name=".ui.AuthActivity" />
         <activity android:name=".ui.DashboardActivity" />
+        <activity
+            android:name=".ui.PayQrScanActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.SmartWallet" />
+        <activity
+            android:name=".ui.PayConfirmActivity"
+            android:exported="false"
+            android:theme="@style/Theme.SmartWallet" />
         <activity 
             android:name=".ui.AssistantActivity"
             android:windowSoftInputMode="adjustResize" />
