@@ -22,7 +22,12 @@
     <dimen name="screen_content_padding_horizontal">32dp</dimen>
     <dimen name="screen_header_margin_bottom">12dp</dimen>
     <dimen name="screen_title_subtitle_spacing">2dp</dimen>
-    <!-- Поля в белой карточке входа/регистрации: уже, чтобы тень серых полей не упиралась в рамку -->
-    <!-- Вход/регистрация: узкий внутренний отступ, чтобы поля и кнопка были шире -->
-    <dimen name="auth_form_field_horizontal_inset">6dp</dimen>
+    <!-- Вход / регистрация: чуть шире поля — меньше отступы от края экрана -->
+    <dimen name="auth_form_screen_padding_horizontal">16dp</dimen>
+    <!-- Внутренний отступ у карточки поля (сумма с padding ≈ край рамки поля от экрана) -->
+    <dimen name="auth_form_field_horizontal_inset">4dp</dimen>
+    <!-- Карточка вкладок: выровняна по внешнему краю полей (padding + field inset) -->
+    <dimen name="auth_form_tab_card_margin_horizontal">20dp</dimen>
+    <!-- Чуть пространства над первым полем — чтобы не обрезалось свечение (outline) -->
+    <dimen name="auth_form_first_field_extra_top">8dp</dimen>
 </resources>

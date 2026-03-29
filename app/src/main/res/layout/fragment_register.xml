@@ -14,8 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
+        android:paddingStart="@dimen/auth_form_screen_padding_horizontal"
+        android:paddingEnd="@dimen/auth_form_screen_padding_horizontal"
         android:paddingTop="24dp"
         android:paddingBottom="24dp">
 
@@ -42,17 +42,19 @@
                     android:layout_height="@dimen/smartwallet_button_height"
                     android:layout_marginStart="@dimen/auth_form_field_horizontal_inset"
                     android:layout_marginEnd="@dimen/auth_form_field_horizontal_inset"
+                    android:layout_marginTop="@dimen/auth_form_first_field_extra_top"
                     android:layout_marginBottom="18dp"
-                    app:cardBackgroundColor="@color/add_card_field_fill"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="4dp"
-                    app:strokeColor="@color/auth_card_stroke"
-                    app:strokeWidth="1dp">
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="@dimen/smartwallet_button_corner"
+                    app:cardElevation="@dimen/home_advice_cards_elevation"
+                    app:cardUseCompatPadding="false"
+                    app:strokeWidth="0dp">
 
                     <EditText
                         android:id="@+id/inputPhone"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:minHeight="@dimen/smartwallet_button_height"
                         android:background="@android:color/transparent"
                         android:gravity="center_vertical"
                         android:hint="Телефон"
@@ -71,16 +73,17 @@
                     android:layout_marginStart="@dimen/auth_form_field_horizontal_inset"
                     android:layout_marginEnd="@dimen/auth_form_field_horizontal_inset"
                     android:layout_marginBottom="18dp"
-                    app:cardBackgroundColor="@color/add_card_field_fill"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="4dp"
-                    app:strokeColor="@color/auth_card_stroke"
-                    app:strokeWidth="1dp">
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="@dimen/smartwallet_button_corner"
+                    app:cardElevation="@dimen/home_advice_cards_elevation"
+                    app:cardUseCompatPadding="false"
+                    app:strokeWidth="0dp">
 
                     <EditText
                         android:id="@+id/inputName"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:minHeight="@dimen/smartwallet_button_height"
                         android:background="@android:color/transparent"
                         android:gravity="center_vertical"
                         android:hint="Имя"
@@ -98,16 +101,17 @@
                     android:layout_marginStart="@dimen/auth_form_field_horizontal_inset"
                     android:layout_marginEnd="@dimen/auth_form_field_horizontal_inset"
                     android:layout_marginBottom="18dp"
-                    app:cardBackgroundColor="@color/add_card_field_fill"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="4dp"
-                    app:strokeColor="@color/auth_card_stroke"
-                    app:strokeWidth="1dp">
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="@dimen/smartwallet_button_corner"
+                    app:cardElevation="@dimen/home_advice_cards_elevation"
+                    app:cardUseCompatPadding="false"
+                    app:strokeWidth="0dp">
 
                     <EditText
                         android:id="@+id/inputEmail"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:minHeight="@dimen/smartwallet_button_height"
                         android:background="@android:color/transparent"
                         android:gravity="center_vertical"
                         android:hint="Email"
@@ -125,11 +129,11 @@
                     android:layout_marginStart="@dimen/auth_form_field_horizontal_inset"
                     android:layout_marginEnd="@dimen/auth_form_field_horizontal_inset"
                     android:layout_marginBottom="18dp"
-                    app:cardBackgroundColor="@color/add_card_field_fill"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="4dp"
-                    app:strokeColor="@color/auth_card_stroke"
-                    app:strokeWidth="1dp">
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="@dimen/smartwallet_button_corner"
+                    app:cardElevation="@dimen/home_advice_cards_elevation"
+                    app:cardUseCompatPadding="false"
+                    app:strokeWidth="0dp">
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -137,8 +141,9 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_gravity="center_vertical"
+                            android:minHeight="@dimen/smartwallet_button_height"
                             style="@style/Widget.SmartWallet.TextInputLayout.AuthPassword"
                             app:endIconMode="password_toggle"
                             app:endIconTint="@color/add_card_edit_gray">
@@ -146,7 +151,7 @@
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/inputPassword"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:background="@android:color/transparent"
                                 android:gravity="start|center_vertical"
                                 android:hint="Пароль"

@@ -21,6 +21,7 @@ import com.example.smartwallet.network.ApiClient;
 import com.example.smartwallet.network.AuthApi;
 import com.example.smartwallet.network.dto.LoginRequest;
 import com.example.smartwallet.network.dto.TokenResponse;
+import com.example.smartwallet.utils.AuthFieldCardsGlow;
 import com.example.smartwallet.utils.ErrorHandler;
 import com.example.smartwallet.utils.Logger;
 import com.example.smartwallet.utils.PhoneMaskHelper;
@@ -47,6 +48,7 @@ public class LoginFragment extends Fragment {
 
         PhoneMaskHelper.attach(phoneInput);
         loginButton.setOnClickListener(v -> attemptLogin());
+        AuthFieldCardsGlow.applyToTree(view, requireContext());
         return view;
     }
 

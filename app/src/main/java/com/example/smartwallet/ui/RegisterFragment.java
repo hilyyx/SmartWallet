@@ -20,6 +20,7 @@ import com.example.smartwallet.network.ApiClient;
 import com.example.smartwallet.network.AuthApi;
 import com.example.smartwallet.network.dto.RegisterRequest;
 import com.example.smartwallet.network.dto.TokenResponse;
+import com.example.smartwallet.utils.AuthFieldCardsGlow;
 import com.example.smartwallet.utils.ErrorHandler;
 import com.example.smartwallet.utils.PhoneMaskHelper;
 import com.example.smartwallet.utils.TokenManager;
@@ -49,6 +50,7 @@ public class RegisterFragment extends Fragment {
 
         PhoneMaskHelper.attach(phoneInput);
         registerButton.setOnClickListener(v -> attemptRegister());
+        AuthFieldCardsGlow.applyToTree(view, requireContext());
         return view;
     }
 
